@@ -72,6 +72,7 @@ class Sensors extends Component {
                         errorText="Temperature Sensor"
                         errorStyle={styles.errorStyle}
                         value={this.state.sensor1}
+                        state={this.setState() }
                         onChange={event =>
                           this.setState({ sensor1: event.target.value })}
                         margin="normal"                     
