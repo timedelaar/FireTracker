@@ -1,9 +1,6 @@
 import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import {fullWhite} from 'material-ui/styles/colors';
 import {amber400} from 'material-ui/styles/colors';
-import FontIcon from 'material-ui/FontIcon';
-import SvgIcon from 'material-ui/SvgIcon';
 import Project from 'material-ui/svg-icons/action/favorite-border';
 import {Link} from 'react-router-dom';
 

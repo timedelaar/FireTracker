@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Grid, Row, Col } from "react-flexbox-grid";
 import arch_wr from './arch_wr.png';
-import arch from './arch.png';
 import Sensors from "./Sensors"
 
 class Demo extends Component {
@@ -18,7 +17,7 @@ class Demo extends Component {
             <Sensors/>
             </Col>
             <Col xs={6}>
-            <img src={arch_wr} />
+            <img src={arch_wr} alt="architecture" />
 
 
             

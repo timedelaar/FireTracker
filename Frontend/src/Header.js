@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import logo from './ring.png';
-import ftlogo from './ftlogo.png';
 import './App.css';
-import Startbutton from './Components/Startbutton';
 import Githubbtn from './Components/Githubbtn';
 import Teambtn from './Components/Teambtn';
 import Projectbtn from './Components/Projectbtn';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 

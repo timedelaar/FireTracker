@@ -15,7 +15,7 @@ class AboutTheTeam extends Component {
             <br/>
             <br/>
             <br/>
-               <img src={people} /> 
+               <img src={people} alt="people"/> 
             </Col>
           <Col xs={2} />
             
