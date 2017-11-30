@@ -5,7 +5,7 @@ import arch from './arch.png';
 import Sensors from "./Sensors"
 
 class Demo extends Component {
-  render() {
+	render() {
     return (
       <div>
         <Grid fluid>

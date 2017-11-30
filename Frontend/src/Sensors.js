@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Grid, Row, Col } from 'react-flexbox-grid';
-import {grey900, amber900} from 'material-ui/styles/colors';
+import { grey900, amber900 } from 'material-ui/styles/colors';
 
 
 const styles = {
@@ -29,30 +28,39 @@ class Sensors extends Component {
     super(props);
   
     this.state = {
-      value: 'Receive value',
-    };
+		value: 'Receive value',
+		temp: 0
+	};
+	this.setState.bind(this);
   }
 
-  getInformation() {
-    fetch("http://localhost:8080/timsapi", {
-      method: "GET",
-      headers: {
-        Accept: "application/json"
-      }
-    })
-      .then(response => {
-        console.log("res", response);
-        return response.json();
-      })
-      .then(responseJson => {
-        console.log("logger", responseJson);
-        this.setState(prevState => {
-          return { prevState, information: responseJson };
-        });
-      })
-      .catch(error => {
-        console.error("Error in informationservice", error);
-      });
+  getInformation(t) {
+	  fetch("http://localhost:7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/ML_box_1/cnt_temp/latest", {
+		  method: "GET",
+		  headers: {
+			  "X-M2M-RI": "12345",
+			  "X-M2M-Origin": "SOrigin",
+			  Accept: "application/json"
+		  }
+	  })
+		  .then(response => {
+			  return response.json();
+		  })
+		  .then(responseJson => {
+			  console.log("logger", responseJson["m2m:cin"].con);
+			  t.setState(prevState => {
+				  return { prevState, temp: responseJson["m2m:cin"].con };
+			  });
+		  })
+		  .catch(error => {
+			  console.error("Error in informationservice", error);
+		  });
+  }
+
+  componentDidMount() {
+	  this.getInformation(this);
+
+	  setInterval(this.getInformation, 1000, this);
   }
 
   render() {
@@ -71,8 +79,7 @@ class Sensors extends Component {
                         hintText="0 Degrees"
                         errorText="Temperature Sensor"
                         errorStyle={styles.errorStyle}
-                        value={this.state.sensor1}
-                        state={this.setState() }
+                        value={this.state.temp}
                         onChange={event =>
                           this.setState({ sensor1: event.target.value })}
                         margin="normal"                     

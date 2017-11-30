@@ -26,10 +26,10 @@ var acp = {};
 conf.useprotocol = 'http'; // select one for 'http' or 'mqtt' or 'coap' or 'ws'
 
 // build cse
-cse.host        = 'localhost';
+cse.host        = '203.253.128.151';
 cse.port        = '7579';
-cse.name        = 'Mobius';
-cse.id          = '/Mobius';
+cse.name        = 'mobius-yt';
+cse.id          = '/mobius-yt';
 cse.mqttport    = '1883';
 cse.wsport      = '7577';
 
@@ -41,64 +41,34 @@ else {
     ae.id = 'S';
 }
 ae.parent       = '/' + cse.name;
-ae.name         = 'Firetracker';
-ae.appid        = 'Firetracker';
+ae.name         = '0807060504030201';
+ae.appid        = 'measure_co2';
 ae.port         = '9727';
 ae.bodytype     = 'json'; // select 'json' or 'xml' or 'cbor'
-ae.tasport = '3105';
-
-var building = 'Gwanggaeto_gwan';
-var floors = ['F1', 'F2', 'F3'];
-var boxes = ['ML_box_1', 'ML_box_2', 'ML_box_3', 'ML_box_4'];
-
+ae.tasport      = '3105';
 
 // build cnt
 var count = 0;
 cnt_arr[count] = {};
 cnt_arr[count].parent = '/' + cse.name + '/' + ae.name;
-cnt_arr[count++].name = building;
-for (var i = 0; i < floors.length; i++) {
-	cnt_arr[count] = {};
-	cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building;
-	cnt_arr[count++].name = floors[i];
-	for (var j = 0; j < boxes.length; j++) {
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i];
-		cnt_arr[count++].name = boxes[j];
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
-		cnt_arr[count++].name = 'cnt_temp';
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
-		cnt_arr[count++].name = 'cnt_smoke';
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
-		cnt_arr[count++].name = 'cnt_people';
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
-		cnt_arr[count++].name = 'cnt_led_green';
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
-		cnt_arr[count++].name = 'cnt_led_red';
-	}
-}
-//cnt_arr[count] = {};
-//cnt_arr[count].parent = '/' + cse.name + '/' + ae.name;
-//cnt_arr[count++].name = 'cnt-timer';
+cnt_arr[count++].name = 'D02544FFFEF18BD3';
+cnt_arr[count] = {};
+cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + cnt_arr[0].name;
+cnt_arr[count++].name = 'up';
 
 // build sub
-//count = 0;
+count = 0;
 //sub_arr[count] = {};
 //sub_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + cnt_arr[1].name;
 //sub_arr[count].name = 'sub-ctrl';
 //sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id;
 
-//sub_arr[count] = {};
-//sub_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + cnt_arr[1].name;
-//sub_arr[count].name = 'sub-ctrl2';
+sub_arr[count] = {};
+sub_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + cnt_arr[0].name + '/' + cnt_arr[1].name;
+sub_arr[count].name = 'sub-ctrl2';
 
-//var ip = require("ip");
-//sub_arr[count++].nu = conf.useprotocol + '://' + ip.address() + ':' + ae.port + '/noti';
+var ip = require("ip");
+sub_arr[count++].nu = conf.useprotocol + '://' + ip.address() + ':' + ae.port + '/noti';
 
 //sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id + '?rcn=9';
 //sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id + '?ct=' + ae.bodytype;
@@ -107,9 +77,9 @@ for (var i = 0; i < floors.length; i++) {
 //sub_arr[count++].nu = 'coap://203.254.173.104:' + ae.port + '/noti';
 
 // build acp: not complete
-//acp.parent = '/' + cse.name + '/' + ae.name;
-//acp.name = 'acp-' + ae.name;
-//acp.id = ae.id;
+acp.parent = '/' + cse.name + '/' + ae.name;
+acp.name = 'acp-' + ae.name;
+acp.id = ae.id;
 
 
 conf.usesecure  = 'disable';
@@ -123,8 +93,6 @@ conf.ae = ae;
 conf.cnt = cnt_arr;
 conf.sub = sub_arr;
 conf.acp = acp;
-conf.floors = floors;
-conf.boxes = boxes;
 
 
 module.exports = conf;
