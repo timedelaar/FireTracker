@@ -41,47 +41,43 @@ else {
     ae.id = 'S';
 }
 ae.parent       = '/' + cse.name;
-ae.name         = 'Firetracker';
-ae.appid        = 'Firetracker';
+ae.name         = 'Firetracker2';
+ae.appid        = 'Firetracker2';
 ae.port         = '9727';
 ae.bodytype     = 'json'; // select 'json' or 'xml' or 'cbor'
 ae.tasport = '3105';
 
 var building = 'Gwanggaeto_gwan';
-var floors = ['F1', 'F2', 'F3'];
-var boxes = ['ML_box_1', 'ML_box_2', 'ML_box_3', 'ML_box_4'];
+var floor = 'F1';
+var box = 'ML_box_5';
 
 
 // build cnt
 var count = 0;
 cnt_arr[count] = {};
 cnt_arr[count].parent = '/' + cse.name + '/' + ae.name;
-cnt_arr[count++].name = building;
-for (var i = 0; i < floors.length; i++) {
-	cnt_arr[count] = {};
-	cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building;
-	cnt_arr[count++].name = floors[i];
-	for (var j = 0; j < boxes.length; j++) {
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i];
-		cnt_arr[count++].name = boxes[j];
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
-		cnt_arr[count++].name = 'cnt_temp';
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
-		cnt_arr[count++].name = 'cnt_smoke';
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
-		cnt_arr[count++].name = 'cnt_people';
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
-		cnt_arr[count++].name = 'cnt_led_green';
-		cnt_arr[count] = {};
-		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
-		cnt_arr[count++].name = 'cnt_led_red';
-	}
-}
+cnt_arr[count++].name = building
+cnt_arr[count] = {};
+cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building;
+cnt_arr[count++].name = floor
+cnt_arr[count] = {};
+cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor;
+cnt_arr[count++].name = box;
+cnt_arr[count] = {};
+cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor + '/' + box;
+cnt_arr[count++].name = 'cnt_temp';
+cnt_arr[count] = {};
+cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor + '/' + box;
+cnt_arr[count++].name = 'cnt_smoke';
+cnt_arr[count] = {};
+cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor + '/' + box;
+cnt_arr[count++].name = 'cnt_people';
+cnt_arr[count] = {};
+cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor + '/' + box;
+cnt_arr[count++].name = 'cnt_led_green';
+cnt_arr[count] = {};
+cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor + '/' + box;
+cnt_arr[count++].name = 'cnt_led_red';
 //cnt_arr[count] = {};
 //cnt_arr[count].parent = '/' + cse.name + '/' + ae.name;
 //cnt_arr[count++].name = 'cnt-timer';
@@ -123,8 +119,6 @@ conf.ae = ae;
 conf.cnt = cnt_arr;
 conf.sub = sub_arr;
 conf.acp = acp;
-conf.floors = floors;
-conf.boxes = boxes;
 
 
 module.exports = conf;
