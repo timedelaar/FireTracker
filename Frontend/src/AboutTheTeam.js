@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Grid, Row, Col } from "react-flexbox-grid";
-import people from './people.png';
-
-
+import people from "./people.png";
 
 class AboutTheTeam extends Component {
   render() {
@@ -10,15 +8,14 @@ class AboutTheTeam extends Component {
       <div>
         <Grid>
           <Row>
-          <Col xs={3} />
-            <Col xs={2} >  
-            <br/>
-            <br/>
-            <br/>
-               <img src={people} alt="people"/> 
+            <Col xs={3} />
+            <Col xs={2}>
+              <br />
+              <br />
+              <br />
+              <img src={people} alt="people" />
             </Col>
-          <Col xs={2} />
-            
+            <Col xs={2} />
           </Row>
         </Grid>
       </div>
@@ -27,5 +24,3 @@ class AboutTheTeam extends Component {
 }
 
 export default AboutTheTeam;
-
-

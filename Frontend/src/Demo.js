@@ -1,28 +1,23 @@
 import React, { Component } from "react";
 import { Grid, Row, Col } from "react-flexbox-grid";
-import arch_wr from './arch_wr.png';
-import firesmall from './firesmall.png';
-import Sensors from "./Sensors"
+import arch_wr from "./arch_wr.png";
+import firesmall from "./firesmall.png";
+import Sensors from "./Sensors";
 
 class Demo extends Component {
-	render() {
+  render() {
     return (
       <div>
         <Grid fluid>
-        <br />
-       <br />
-       <br />
-    
+          <br />
+          <br />
+          <br />
           <Row>
             <Col xs={6}>
-            <Sensors/>
+              <Sensors />
             </Col>
             <Col xs={6}>
-            <img src={arch_wr} alt="architecture" />
-
-
-            
-Demo
+              <img src={arch_wr} alt="architecture" />
             </Col>
           </Row>
         </Grid>
@@ -32,5 +27,3 @@ Demo
 }
 
 export default Demo;
-
-
