@@ -1,5 +1,8 @@
 var conf = require('./conf');
+var Mcp3008 = require('mcp3008.js');
 
+var adc = new Mcp3008();
+var tempChannel = 0;
 var chanceOfFire = 0.00001;
 
 setInterval(getTemp, 1000);
@@ -51,10 +54,11 @@ function checkIfContainerExists() {
 }
 
 function getTemp() {
-	var temp = getRandomValue(18, 22);
-	var name = 'cnt_temp';
-	var cin = { ctname: name, con: temp };
-	sendDataToServer(JSON.stringify(cin));
+	adc.read(temp_channel, function (temp) {
+		var name = 'cnt_temp';
+		var cin = { ctname: name, con: temp };
+		sendDataToServer(JSON.stringify(cin));
+	});
 }
 
 function getRandomValue(min, max) {
