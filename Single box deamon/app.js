@@ -3,6 +3,8 @@ var Mcp3008 = require('mcp3008.js');
 
 var adc = new Mcp3008();
 var tempChannel = 0;
+var smokeChannel = 1;
+var irChannel = 2;
 var chanceOfFire = 0.00001;
 
 setInterval(getTemp, 1000);
@@ -57,6 +59,22 @@ function getTemp() {
 	adc.read(tempChannel, function (temp) {
 		var name = 'cnt_temp';
 		var cin = { ctname: name, con: temp };
+		sendDataToServer(JSON.stringify(cin));
+	});
+}
+
+function getSmoke() {
+	adc.read(tempChannel, function (smoke) {
+		var name = 'cnt_smoke';
+		var cin = { ctname: name, con: smoke };
+		sendDataToServer(JSON.stringify(cin));
+	});
+}
+
+function getIR() {
+	adc.read(tempChannel, function (people) {
+		var name = 'cnt_people';
+		var cin = { ctname: name, con: people };
 		sendDataToServer(JSON.stringify(cin));
 	});
 }
