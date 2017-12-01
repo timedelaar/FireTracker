@@ -54,7 +54,7 @@ function checkIfContainerExists() {
 }
 
 function getTemp() {
-	adc.read(temp_channel, function (temp) {
+	adc.read(tempChannel, function (temp) {
 		var name = 'cnt_temp';
 		var cin = { ctname: name, con: temp };
 		sendDataToServer(JSON.stringify(cin));

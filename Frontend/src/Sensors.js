@@ -32,7 +32,7 @@ class Sensors extends Component {
 
   getInformation(t) {
     fetch(
-      "http://localhost:7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/ML_box_1/cnt_temp/latest",
+      "http://localhost:7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/ML_box_5/cnt_temp/latest",
       {
         method: "GET",
         headers: {

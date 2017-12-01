@@ -26,7 +26,7 @@ var acp = {};
 conf.useprotocol = 'http'; // select one for 'http' or 'mqtt' or 'coap' or 'ws'
 
 // build cse
-cse.host        = 'localhost';
+cse.host        = '192.168.137.135';
 cse.port        = '7579';
 cse.name        = 'Mobius';
 cse.id          = '/Mobius';
@@ -41,8 +41,8 @@ else {
     ae.id = 'S';
 }
 ae.parent       = '/' + cse.name;
-ae.name         = 'Firetracker2';
-ae.appid        = 'Firetracker2';
+ae.name         = 'Firetracker';
+ae.appid        = 'Firetracker';
 ae.port         = '9727';
 ae.bodytype     = 'json'; // select 'json' or 'xml' or 'cbor'
 ae.tasport = '3105';
