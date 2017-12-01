@@ -7,7 +7,7 @@ var smokeChannel = 1;
 var irChannel = 2;
 var chanceOfFire = 0.00001;
 
-setInterval(getTemp, 1000);
+setInterval(getValues, 1000);
 
 // Check if AE exists and create if not
 getValue(conf.ae, '2', function (status, res_body, to) {
@@ -64,7 +64,7 @@ function getTemp() {
 }
 
 function getSmoke() {
-	adc.read(tempChannel, function (smoke) {
+	adc.read(smokeChannel, function (smoke) {
 		var name = 'cnt_smoke';
 		var cin = { ctname: name, con: smoke };
 		sendDataToServer(JSON.stringify(cin));
@@ -72,11 +72,17 @@ function getSmoke() {
 }
 
 function getIR() {
-	adc.read(tempChannel, function (people) {
+	adc.read(irChannel, function (people) {
 		var name = 'cnt_people';
 		var cin = { ctname: name, con: people };
 		sendDataToServer(JSON.stringify(cin));
 	});
+}
+
+function getValues() {
+	getTemp();
+	getSmoke();
+	getIR();
 }
 
 function getRandomValue(min, max) {
