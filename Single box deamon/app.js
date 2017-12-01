@@ -56,7 +56,9 @@ function checkIfContainerExists() {
 }
 
 function getTemp() {
-	adc.read(tempChannel, function (temp) {
+	adc.read(tempChannel, function (value) {
+		var mVolts = value * (3300.0 / 1024.0);
+		var temp = ((mVolts - 100.0) / 10.0) - 40.0;
 		var name = 'cnt_temp';
 		var cin = { ctname: name, con: temp };
 		sendDataToServer(JSON.stringify(cin));
