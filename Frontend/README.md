@@ -4,6 +4,9 @@ The web application is designed to visualize our firetracking demo. It is made w
 
 - [General information](#general-information)
 - [Modules](#modules)
+    - [Material UI](#material-ui)
+    - [React Router](#react-router)
+    - [React Flexbox Grid](#react-flexbox-grid)
 - [Start](#start)
 
 ## General information
@@ -14,15 +17,15 @@ Within the Demo component, an image of the ground architecture is given with an 
 ## Modules
 The following npm-modules are included:
 
-Material UI
+### Material UI
 Material UI is a set of react components that implement Google's material design.
 Link: https://material-ui-1dab0.firebaseapp.com/
 
-React Router
+### React Router
 Through the router-module, the opportunity for declarative routing is given. Thus, rendering the different views operable through a menu component but remaining a single page application and preserving all the respective advantages is possible.
 Link: https://github.com/ReactTraining/react-router
 
-React Flexbox Grid
+### React Flexbox Grid
 For the purpose of displaying a grid layout and arranging the single react components, the module react-flexbox-grid is used.
 Link: https://github.com/roylee0704/react-flexbox-grid
 
