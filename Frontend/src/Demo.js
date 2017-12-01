@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Grid, Row, Col } from "react-flexbox-grid";
 import arch_wr from './arch_wr.png';
+import firesmall from './firesmall.png';
 import Sensors from "./Sensors"
 
 class Demo extends Component {
