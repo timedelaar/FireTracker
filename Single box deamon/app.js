@@ -1,16 +1,23 @@
 var conf = require('./conf');
 var Mcp3008 = require('mcp3008.js');
+var gpio = require('rpi-gpio');
 
 var adc = new Mcp3008();
 var tempChannel = 0;
 var smokeChannel = 1;
 var irChannel = 2;
+var greenLedPin = 21;
 
 var thresholds = {
 	temp: 50,
 	smoke: 1.5,
 	people: 500
 };
+
+gpio.setup(greenLedPin, gpio.DIR_HIGH, function (error) {
+	console.log("error setting green led channel");
+	console.log(error);
+})
 
 setInterval(getValues, 1000);
 
@@ -63,7 +70,7 @@ function checkIfContainerExists() {
 function getTemp() {
 	adc.read(tempChannel, function (value) {
 		var mVolts = value * 5000.0 / 1024.0;
-		var temp = ((mVolts - 100.0) / 10.0) - 40.0;
+		var temp = (mVolts - 100.0) / 10.0 - 40.0;
 		var name = 'cnt_temp';
 		var cin = { ctname: name, con: temp };
 		sendDataToServer(JSON.stringify(cin));
@@ -275,7 +282,7 @@ function http_request(path, method, ty, bodyString, callback) {
 	}
 
 	if (ty != '-1') {
-		var a = (ty === '') ? '' : ('; ty=' + ty);
+		var a = ty === '' ? '' : '; ty=' + ty;
 		options.headers['Content-Type'] = 'application/vnd.onem2m-res+' + conf.ae.bodytype + a;
 	}
 
