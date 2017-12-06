@@ -13,18 +13,18 @@ var redLedPin = 21;
 var greenLED = new Gpio(greenLedPin, 'out'); //use GPIO pin 4, and specify that it is output
 var redLED = new Gpio(redLedPin, 'out');
 
-//setInterval(blinkLeds, 250);
+setInterval(blinkLeds, 250);
 
-//function blinkLeds() {
-//	if (greenLED.readSync() == 0) {
-//		greenLED.writeSync(1);
-//		redLED.writeSync(1);
-//	}
-//	else {
-//		greenLED.writeSync(0);
-//		redLED.writeSync(0);
-//	}
-//}
+function blinkLeds() {
+	if (greenLED.readSync() == 0) {
+		greenLED.writeSync(1);
+		redLED.writeSync(1);
+	}
+	else {
+		greenLED.writeSync(0);
+		redLED.writeSync(0);
+	}
+}
 
 var thresholds = {
 	temp: 50,
