@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Grid, Row, Col } from "react-flexbox-grid";
-import arch_wr from "./arch_wr.png";
-import firesmall from "./firesmall.png";
+import room from "./arch_wr.png";
+import onfire from "./onfire.png";
 import Sensors from "./Sensors";
+
+
 
 class Demo extends Component {
   render() {
@@ -17,7 +19,7 @@ class Demo extends Component {
               <Sensors />
             </Col>
             <Col xs={6}>
-              <img src={arch_wr} alt="architecture" />
+              <img src={room} alt="architecture" />
             </Col>
           </Row>
         </Grid>
@@ -27,3 +29,9 @@ class Demo extends Component {
 }
 
 export default Demo;
+
+/*
+<Col xs={6}>
+          <img src={onfire} alt="room is burning" />
+</Col>
+*/
