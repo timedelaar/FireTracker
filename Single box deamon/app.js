@@ -10,8 +10,8 @@ var greenLedPin = 20;
 var redLedPin = 21;
 
 
-//var greenLED = new Gpio(greenLedPin, 'out'); //use GPIO pin 4, and specify that it is output
-//var redLED = new Gpio(redLedPin, 'out');
+var greenLED = new Gpio(greenLedPin, 'out'); //use GPIO pin 4, and specify that it is output
+var redLED = new Gpio(redLedPin, 'out');
 
 //setInterval(blinkLeds, 250);
 
