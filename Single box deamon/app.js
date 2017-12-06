@@ -6,11 +6,25 @@ var adc = new Mcp3008();
 var tempChannel = 0;
 var smokeChannel = 1;
 var irChannel = 2;
-var greenLedPin = 21;
+var greenLedPin = 20;
+var redLedPin = 21;
 
 
-var greenLED = new Gpio(21, 'out'); //use GPIO pin 4, and specify that it is output
-greenLED.writeSync(1);
+var greenLED = new Gpio(greenLedPin, 'out'); //use GPIO pin 4, and specify that it is output
+var redLED = new Gpio(redLedPin, 'out');
+
+setInterval(blinkLeds, 250);
+
+function blinkLeds() {
+	if (greenLED.readSync() == 0) {
+		greenLED.writeSync(1);
+		redLED.writeSync(1);
+	}
+	else {
+		greenLED.writeSync(0);
+		redLED.writeSync(0);
+	}
+}
 
 var thresholds = {
 	temp: 50,
@@ -72,7 +86,7 @@ function getTemp() {
 		var temp = (mVolts - 100.0) / 10.0 - 40.0;
 		var name = 'cnt_temp';
 		if (temp == null) {
-			temp = 'Null';
+			console.log('temp is null');
 		}
 		var cin = { ctname: name, con: temp };
 		sendDataToServer(JSON.stringify(cin));
@@ -90,7 +104,7 @@ function getSmoke() {
 			var ratio = RS / R0;
 			var name = 'cnt_smoke';
 			if (ratio == null) {
-				ratio = 'Null';
+				console.log('ratio is null');
 			}
 			var cin = { ctname: name, con: ratio };
 			sendDataToServer(JSON.stringify(cin));
@@ -105,7 +119,7 @@ function getIR() {
 		var name = 'cnt_people';
 		var people = value > thresholds.people ? 1 : 0;
 		if (people == null) {
-			people = 'Null';
+			console.log('people is null');
 		}
 		var cin = { ctname: name, con: people };
 		sendDataToServer(JSON.stringify(cin));
