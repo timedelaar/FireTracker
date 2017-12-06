@@ -5,7 +5,6 @@ var adc = new Mcp3008();
 var tempChannel = 0;
 var smokeChannel = 1;
 var irChannel = 2;
-var chanceOfFire = 0.00001;
 
 setInterval(getValues, 1000);
 
@@ -57,7 +56,7 @@ function checkIfContainerExists() {
 
 function getTemp() {
 	adc.read(tempChannel, function (value) {
-		var mVolts = value * (3300.0 / 1024.0);
+		var mVolts = value * 5000.0 / 1024.0;
 		var temp = ((mVolts - 100.0) / 10.0) - 40.0;
 		var name = 'cnt_temp';
 		var cin = { ctname: name, con: temp };
@@ -67,12 +66,13 @@ function getTemp() {
 
 function getSmoke() {
 		adc.read(smokeChannel, function (value) {
-			var volt = value / 1024.0 * 3.3;
-			var RS = (3.3 - volt) / volt;
+			var volt = value / 1024.0 * 5.0;
+			var RS = (5.0 - volt) / volt;
 			var R0 = 1.6;
 			var ratio = RS / R0;
+			var smoke = ratio < 1.5 ? 1 : 0;
 			var name = 'cnt_smoke';
-			var cin = { ctname: name, con: ratio };
+			var cin = { ctname: name, con: smoke };
 			sendDataToServer(JSON.stringify(cin));
 		});
 }
