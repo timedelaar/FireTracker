@@ -85,11 +85,9 @@ function getTemp() {
 		var mVolts = value * 5000.0 / 1024.0;
 		var temp = (mVolts - 100.0) / 10.0 - 40.0;
 		var name = 'cnt_temp';
-		if (temp == null) {
-			console.log('temp is null');
-		}
 		var cin = { ctname: name, con: temp };
-		sendDataToServer(JSON.stringify(cin));
+		console.log(cin);
+		sendDataToServer(cin);
 		if (temp > thresholds.temp) {
 			// Fire
 		}
@@ -97,32 +95,28 @@ function getTemp() {
 }
 
 function getSmoke() {
-		adc.read(smokeChannel, function (value) {
-			var volt = value / 1024.0 * 5.0;
-			var RS = (5.0 - volt) / volt;
-			var R0 = 1.6;
-			var ratio = RS / R0;
-			var name = 'cnt_smoke';
-			if (ratio == null) {
-				console.log('ratio is null');
-			}
-			var cin = { ctname: name, con: ratio };
-			sendDataToServer(JSON.stringify(cin));
-			if (ratio < thresholds.smoke) {
-				// Fire
-			}
-		});
+	adc.read(smokeChannel, function (value) {
+		var volt = value / 1024.0 * 5.0;
+		var RS = (5.0 - volt) / volt;
+		var R0 = 1.6;
+		var ratio = RS / R0;
+		var name = 'cnt_smoke';
+		var cin = { ctname: name, con: ratio };
+		console.log(cin);
+		sendDataToServer(cin);
+		if (ratio < thresholds.smoke) {
+			// Fire
+		}
+	});
 }
 
 function getIR() {
 	adc.read(irChannel, function (value) {
 		var name = 'cnt_people';
 		var people = value > thresholds.people ? 1 : 0;
-		if (people == null) {
-			console.log('people is null');
-		}
 		var cin = { ctname: name, con: people };
-		sendDataToServer(JSON.stringify(cin));
+		console.log(cin);
+		sendDataToServer(cin);
 	});
 }
 
@@ -132,15 +126,9 @@ function getValues() {
 	getIR();
 }
 
-function getRandomValue(min, max) {
-	return Math.round(Math.random() * (max - min) + min);
-}
-
 function sendDataToServer(data) {
-
-	var jsonObj = JSON.parse(data);
-	var ctname = jsonObj.ctname;
-	var content = jsonObj.con;
+	var ctname = data.ctname;
+	var content = data.con;
 
 	for (var j = 0; j < conf.cnt.length; j++) {
 		if (conf.cnt[j].name == ctname) {
