@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { Grid, Row, Col } from "react-flexbox-grid";
 import arch_wr from "./arch_wr.png";
-import firesmall from "./firesmall.png";
+import onfire from "./onfire.png";
 import Sensors from "./Sensors";
 import RaisedButton from "material-ui/RaisedButton";
-import { amber600 } from "material-ui/styles/colors";
+
 
 class Demo extends Component {
   render() {
@@ -19,10 +19,6 @@ class Demo extends Component {
               <Sensors />
             </Col>
             <Col xs={6}>
-            <RaisedButton
-             label="Room1"
-             backgroundColor={amber600}
-            />
               <img src={arch_wr} alt="architecture" />
             </Col>
           </Row>
@@ -33,3 +29,9 @@ class Demo extends Component {
 }
 
 export default Demo;
+
+/*
+<Col xs={6}>
+          <img src={onfire} alt="room is burning" />
+</Col>
+*/
