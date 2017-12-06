@@ -26,7 +26,7 @@ var acp = {};
 conf.useprotocol = 'http'; // select one for 'http' or 'mqtt' or 'coap' or 'ws'
 
 // build cse
-cse.host        = '192.168.0.15';
+cse.host        = 'localhost';
 cse.port        = '7579';
 cse.name        = 'Mobius';
 cse.id          = '/Mobius';
@@ -45,21 +45,21 @@ ae.name         = 'Firetracker';
 ae.appid        = 'Firetracker';
 ae.port         = '9727';
 ae.bodytype     = 'json'; // select 'json' or 'xml' or 'cbor'
-ae.tasport		= '3105';
+ae.tasport = '3105';
 
 var building = 'Gwanggaeto_gwan';
 var floor = 'F1';
-var box = 'ML_box_5';
+var box = 'ML_box_1';
 
 
 // build cnt
 var count = 0;
 cnt_arr[count] = {};
 cnt_arr[count].parent = '/' + cse.name + '/' + ae.name;
-cnt_arr[count++].name = building
+cnt_arr[count++].name = building;
 cnt_arr[count] = {};
 cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building;
-cnt_arr[count++].name = floor
+cnt_arr[count++].name = floor;
 cnt_arr[count] = {};
 cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor;
 cnt_arr[count++].name = box;
@@ -72,12 +72,6 @@ cnt_arr[count++].name = 'cnt_smoke';
 cnt_arr[count] = {};
 cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor + '/' + box;
 cnt_arr[count++].name = 'cnt_people';
-cnt_arr[count] = {};
-cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor + '/' + box;
-cnt_arr[count++].name = 'cnt_led_green';
-cnt_arr[count] = {};
-cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor + '/' + box;
-cnt_arr[count++].name = 'cnt_led_red';
 //cnt_arr[count] = {};
 //cnt_arr[count].parent = '/' + cse.name + '/' + ae.name;
 //cnt_arr[count++].name = 'cnt-timer';

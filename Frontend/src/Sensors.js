@@ -4,6 +4,10 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Grid, Row, Col } from "react-flexbox-grid";
 import { grey900, amber900 } from "material-ui/styles/colors";
 
+const building = "Gwanggaeto_gwan";
+const floor = "F1";
+const box = "ML_box_5";
+
 const styles = {
   errorStyle: {
     color: grey900
@@ -25,14 +29,16 @@ class Sensors extends Component {
 
     this.state = {
       value: "Receive value",
-      temp: 0
+	  temp: 0,
+	  smoke: 0,
+	  people: 0
     };
     this.setState.bind(this);
   }
 
-  getInformation(t) {
+  getValue(t, value, building, floor, box, container) {
     fetch(
-      "http://localhost:7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/ML_box_1/cnt_temp/latest",
+      "http://localhost:7579/Mobius/Firetracker/" + building + "/" + floor +"/" + box + "/" + container + "/latest",
       {
         method: "GET",
         headers: {
@@ -46,14 +52,19 @@ class Sensors extends Component {
         return response.json();
       })
       .then(responseJson => {
-        console.log("logger", responseJson["m2m:cin"].con);
         t.setState(prevState => {
-          return { prevState, temp: responseJson["m2m:cin"].con };
+          return { prevState, [value]: responseJson["m2m:cin"].con };
         });
       })
       .catch(error => {
         console.error("Error in informationservice", error);
       });
+  }
+
+  getInformation(t) {
+	  t.getValue(t, 'temp', building, floor, box, "cnt_temp");
+	  t.getValue(t, 'smoke', building, floor, box, "cnt_smoke");
+	  t.getValue(t, 'people', building, floor, box, "cnt_people");
   }
 
   componentDidMount() {
@@ -102,9 +113,9 @@ class Sensors extends Component {
                     hintText="Placeholder for value"
                     errorText="Smoke Sensor"
                     errorStyle={styles.errorStyle}
-                    value={this.state.sensor2}
+                    value={this.state.smoke}
                     onChange={event =>
-                      this.setState({ sensor2: event.target.value })
+                      this.setState({ smoke: event.target.value })
                     }
                     margin="normal"
                   />
@@ -127,9 +138,9 @@ class Sensors extends Component {
                     hintText="Placeholder for value"
                     errorText="Infrared Sensor"
                     errorStyle={styles.errorStyle}
-                    value={this.state.sensor3}
+                    value={this.state.people}
                     onChange={event =>
-                      this.setState({ sensor3: event.target.value })
+                      this.setState({ people: event.target.value })
                     }
                     margin="normal"
                   />

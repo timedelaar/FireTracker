@@ -1,18 +1,8 @@
 var conf = require('./conf');
-var Mcp3008 = require('mcp3008.js');
 
-var adc = new Mcp3008();
-var tempChannel = 0;
-var smokeChannel = 1;
-var irChannel = 2;
+var chanceOfFire = 0.00001;
 
-var thresholds = {
-	temp: 50,
-	smoke: 1.5,
-	people: 500
-};
-
-setInterval(getValues, 1000);
+setInterval(getTemp, 1000);
 
 // Check if AE exists and create if not
 getValue(conf.ae, '2', function (status, res_body, to) {
@@ -61,67 +51,35 @@ function checkIfContainerExists() {
 }
 
 function getTemp() {
-	adc.read(tempChannel, function (value) {
-		var mVolts = value * 5000.0 / 1024.0;
-		var temp = ((mVolts - 100.0) / 10.0) - 40.0;
-		var name = 'cnt_temp';
-		var cin = { ctname: name, con: temp };
-		sendDataToServer(JSON.stringify(cin));
-		if (temp > thresholds.temp) {
-			// Fire
+	for (var i = 0; i < conf.floors.length; i++) {
+		for (var j = 0; j < conf.boxes.length; j++) {
+			var temp = getRandomValue(18, 22);
+			var name = 'cnt_temp';
+			var cin = { ctname: name, con: temp };
+			sendDataToServer(conf.floors[i], conf.boxes[j], JSON.stringify(cin));
 		}
-	});
-}
-
-function getSmoke() {
-		adc.read(smokeChannel, function (value) {
-			var volt = value / 1024.0 * 5.0;
-			var RS = (5.0 - volt) / volt;
-			var R0 = 1.6;
-			var ratio = RS / R0;
-			var name = 'cnt_smoke';
-			var cin = { ctname: name, con: ratio };
-			sendDataToServer(JSON.stringify(cin));
-			if (ratio < thresholds.smoke) {
-				// Fire
-			}
-		});
-}
-
-function getIR() {
-	adc.read(irChannel, function (value) {
-		var name = 'cnt_people';
-		var people = value > thresholds.people ? 1 : 0;
-		var cin = { ctname: name, con: people };
-		sendDataToServer(JSON.stringify(cin));
-	});
-}
-
-function getValues() {
-	getTemp();
-	getSmoke();
-	getIR();
+	}
 }
 
 function getRandomValue(min, max) {
 	return Math.round(Math.random() * (max - min) + min);
 }
 
-function sendDataToServer(data) {
+function sendDataToServer(floor, box, data) {
 
 	var jsonObj = JSON.parse(data);
 	var ctname = jsonObj.ctname;
 	var content = jsonObj.con;
 
 	for (var j = 0; j < conf.cnt.length; j++) {
-		if (conf.cnt[j].name == ctname) {
+		if (conf.cnt[j].name == ctname && conf.cnt[j].parent.indexOf(floor) !== -1 && conf.cnt[j].parent.indexOf(box) !== -1) {
 			crtci(conf.cnt[j], content.toString(), function (status, res_body, to) {
 				try {
 					var to_arr = to.split('/');
 					var ctname = to_arr[to_arr.length - 1];
 					var result = {};
 					result.ctname = ctname;
-					result.con = content;
+					result.con = status;
 
 					console.log('<---- x-m2m-rsc : ' + status + ' <----');
 					if (status == 5106 || status == 2001 || status == 4105) {
