@@ -72,6 +72,9 @@ function getTemp() {
 		var mVolts = value * 5000.0 / 1024.0;
 		var temp = (mVolts - 100.0) / 10.0 - 40.0;
 		var name = 'cnt_temp';
+		if (temp == null) {
+			temp = 'Null';
+		}
 		var cin = { ctname: name, con: temp };
 		sendDataToServer(JSON.stringify(cin));
 		if (temp > thresholds.temp) {
@@ -87,6 +90,9 @@ function getSmoke() {
 			var R0 = 1.6;
 			var ratio = RS / R0;
 			var name = 'cnt_smoke';
+			if (ratio == null) {
+				ratio = 'Null';
+			}
 			var cin = { ctname: name, con: ratio };
 			sendDataToServer(JSON.stringify(cin));
 			if (ratio < thresholds.smoke) {
@@ -99,6 +105,9 @@ function getIR() {
 	adc.read(irChannel, function (value) {
 		var name = 'cnt_people';
 		var people = value > thresholds.people ? 1 : 0;
+		if (people == null) {
+			people = 'Null';
+		}
 		var cin = { ctname: name, con: people };
 		sendDataToServer(JSON.stringify(cin));
 	});
