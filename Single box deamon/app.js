@@ -6,6 +6,12 @@ var tempChannel = 0;
 var smokeChannel = 1;
 var irChannel = 2;
 
+var thresholds = {
+	temp: 50,
+	smoke: 1.5,
+	people: 500
+};
+
 setInterval(getValues, 1000);
 
 // Check if AE exists and create if not
@@ -61,6 +67,9 @@ function getTemp() {
 		var name = 'cnt_temp';
 		var cin = { ctname: name, con: temp };
 		sendDataToServer(JSON.stringify(cin));
+		if (temp > thresholds.temp) {
+			// Fire
+		}
 	});
 }
 
@@ -70,16 +79,19 @@ function getSmoke() {
 			var RS = (5.0 - volt) / volt;
 			var R0 = 1.6;
 			var ratio = RS / R0;
-			var smoke = ratio < 1.5 ? 1 : 0;
 			var name = 'cnt_smoke';
-			var cin = { ctname: name, con: smoke };
+			var cin = { ctname: name, con: ratio };
 			sendDataToServer(JSON.stringify(cin));
+			if (ratio < thresholds.smoke) {
+				// Fire
+			}
 		});
 }
 
 function getIR() {
-	adc.read(irChannel, function (people) {
+	adc.read(irChannel, function (value) {
 		var name = 'cnt_people';
+		var people = value > thresholds.people ? 1 : 0;
 		var cin = { ctname: name, con: people };
 		sendDataToServer(JSON.stringify(cin));
 	});
