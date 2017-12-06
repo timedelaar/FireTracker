@@ -14,10 +14,14 @@ var thresholds = {
 	people: 500
 };
 
-gpio.setup(greenLedPin, gpio.DIR_HIGH, function (error) {
-	console.log("error setting green led channel");
-	console.log(error);
-})
+gpio.setup(greenLedPin, gpio.DIR_HIGH, write);
+
+function write() {
+	gpio.write(greenLedPin, true, function (err) {
+		if (err) throw err;
+		console.log('Written to pin');
+	});
+}
 
 setInterval(getValues, 1000);
 
