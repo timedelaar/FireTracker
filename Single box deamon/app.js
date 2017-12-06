@@ -1,6 +1,6 @@
 var conf = require('./conf');
 var Mcp3008 = require('mcp3008.js');
-var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
+//var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
 
 var adc = new Mcp3008();
 var tempChannel = 0;
@@ -10,21 +10,21 @@ var greenLedPin = 20;
 var redLedPin = 21;
 
 
-var greenLED = new Gpio(greenLedPin, 'out'); //use GPIO pin 4, and specify that it is output
-var redLED = new Gpio(redLedPin, 'out');
+////var greenLED = new Gpio(greenLedPin, 'out'); //use GPIO pin 4, and specify that it is output
+////var redLED = new Gpio(redLedPin, 'out');
 
-setInterval(blinkLeds, 250);
+//setInterval(blinkLeds, 250);
 
-function blinkLeds() {
-	if (greenLED.readSync() == 0) {
-		greenLED.writeSync(1);
-		redLED.writeSync(1);
-	}
-	else {
-		greenLED.writeSync(0);
-		redLED.writeSync(0);
-	}
-}
+//function blinkLeds() {
+//	if (greenLED.readSync() == 0) {
+//		greenLED.writeSync(1);
+//		redLED.writeSync(1);
+//	}
+//	else {
+//		greenLED.writeSync(0);
+//		redLED.writeSync(0);
+//	}
+//}
 
 var thresholds = {
 	temp: 50,
@@ -86,7 +86,6 @@ function getTemp() {
 		var temp = (mVolts - 100.0) / 10.0 - 40.0;
 		var name = 'cnt_temp';
 		var cin = { ctname: name, con: temp };
-		console.log(cin);
 		sendDataToServer(cin);
 		if (temp > thresholds.temp) {
 			// Fire
@@ -102,7 +101,6 @@ function getSmoke() {
 		var ratio = RS / R0;
 		var name = 'cnt_smoke';
 		var cin = { ctname: name, con: ratio };
-		console.log(cin);
 		sendDataToServer(cin);
 		if (ratio < thresholds.smoke) {
 			// Fire
@@ -115,7 +113,6 @@ function getIR() {
 		var name = 'cnt_people';
 		var people = value > thresholds.people ? 1 : 0;
 		var cin = { ctname: name, con: people };
-		console.log(cin);
 		sendDataToServer(cin);
 	});
 }
