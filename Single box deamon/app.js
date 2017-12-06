@@ -1,6 +1,6 @@
 var conf = require('./conf');
 var Mcp3008 = require('mcp3008.js');
-var gpio = require('rpi-gpio');
+var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
 
 var adc = new Mcp3008();
 var tempChannel = 0;
@@ -8,20 +8,15 @@ var smokeChannel = 1;
 var irChannel = 2;
 var greenLedPin = 21;
 
+
+var greenLED = new Gpio(21, 'out'); //use GPIO pin 4, and specify that it is output
+greenLED.writeSync(1);
+
 var thresholds = {
 	temp: 50,
 	smoke: 1.5,
 	people: 500
 };
-
-gpio.setup(greenLedPin, gpio.DIR_HIGH, write);
-
-function write() {
-	gpio.write(greenLedPin, true, function (err) {
-		if (err) throw err;
-		console.log('Written to pin');
-	});
-}
 
 setInterval(getValues, 1000);
 
