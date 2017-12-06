@@ -1,6 +1,6 @@
 var conf = require('./conf');
 var Mcp3008 = require('mcp3008.js');
-//var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
+var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
 
 var adc = new Mcp3008();
 var tempChannel = 0;
