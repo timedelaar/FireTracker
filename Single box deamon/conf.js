@@ -45,7 +45,7 @@ ae.name         = 'Firetracker';
 ae.appid        = 'Firetracker';
 ae.port         = '9727';
 ae.bodytype     = 'json'; // select 'json' or 'xml' or 'cbor'
-ae.tasport = '3105';
+ae.tasport		= '3105';
 
 var building = 'Gwanggaeto_gwan';
 var floor = 'F1';

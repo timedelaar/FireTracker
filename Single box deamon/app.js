@@ -66,23 +66,15 @@ function getTemp() {
 }
 
 function getSmoke() {
-	var i = 0;
-	var value = 0;
-	for (var j = 0; j < 100; j++) {
-		adc.read(smokeChannel, function (smoke) {
-			i++;
-			value += smoke;
-			if (i == 99) {
-				value /= 100.0;
-				var volt = value / 1024 * 3.3;
-				var RS_air = (3.3 - volt) / volt;
-				var R0 = RS_air / 10.0;
-				var name = 'cnt_smoke';
-				var cin = { ctname: name, con: R0 };
-				sendDataToServer(JSON.stringify(cin));
-			}
+		adc.read(smokeChannel, function (value) {
+			var volt = value / 1024.0 * 3.3;
+			var RS = (3.3 - volt) / volt;
+			var R0 = 1.6;
+			var ratio = RS / R0;
+			var name = 'cnt_smoke';
+			var cin = { ctname: name, con: ratio };
+			sendDataToServer(JSON.stringify(cin));
 		});
-	}
 }
 
 function getIR() {
