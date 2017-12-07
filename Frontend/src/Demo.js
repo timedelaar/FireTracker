@@ -843,7 +843,6 @@ function get_data(n, type) {
       console.log(responseJson)
       if (responseJson["m2m:cin"]) {
         var box = grid[boxes_position[n - 1][0]][boxes_position[n - 1][1]]
-        console.log(box);
         box[sensor_type] = responseJson["m2m:cin"].con
       }
 
