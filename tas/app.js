@@ -196,7 +196,7 @@ function on_receive(data) {
 								console.log(g_down_buf + ' <----');
 								if (onPi) {
 									console.log('Switch ' + download_arr[j].id);
-									download_arr[j].led.writeSync(sink_obj.con);
+									download_arr[j].led.writeSync(parseInt(sink_obj.con));
 								}
                                 break;
                             }
