@@ -4,10 +4,6 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Grid, Row, Col } from "react-flexbox-grid";
 import { grey900, amber900 } from "material-ui/styles/colors";
 
-const building = "Gwanggaeto_gwan";
-const floor = "F1";
-const box = "ML_box_5";
-
 const styles = {
   errorStyle: {
     color: grey900
@@ -24,21 +20,28 @@ const styles = {
 };
 
 class Sensors extends Component {
-  constructor(props) {
+
+  constructor(props, building, floor, box, element) {
     super(props);
+
+    this.info = {
+      building: building,
+      floor: floor,
+      box: box
+    }
 
     this.state = {
       value: "Receive value",
-	  temp: 0,
-	  smoke: 0,
-	  people: 0
+      temp: 0,
+      smoke: 0,
+      people: 0
     };
     this.setState.bind(this);
   }
 
   getValue(t, value, building, floor, box, container) {
     fetch(
-      "http://localhost:7579/Mobius/Firetracker/" + building + "/" + floor +"/" + box + "/" + container + "/latest",
+      "http://localhost:7579/Mobius/Firetracker/" + building + "/" + floor + "/" + box + "/" + container + "/latest",
       {
         method: "GET",
         headers: {
@@ -53,7 +56,12 @@ class Sensors extends Component {
       })
       .then(responseJson => {
         t.setState(prevState => {
-          return { prevState, [value]: responseJson["m2m:cin"].con };
+          if (responseJson["m2m:cin"]) {
+            console.log('holaaa')
+            return { prevState, [value]: responseJson["m2m:cin"].con };
+          } else {
+            return { prevState }
+          }
         });
       })
       .catch(error => {
@@ -62,9 +70,9 @@ class Sensors extends Component {
   }
 
   getInformation(t) {
-	  t.getValue(t, 'temp', building, floor, box, "cnt_temp");
-	  t.getValue(t, 'smoke', building, floor, box, "cnt_smoke");
-	  t.getValue(t, 'people', building, floor, box, "cnt_people");
+    t.getValue(t, 'temp', this.info.building, this.info.floor, this.info.box, "cnt_temp");
+    t.getValue(t, 'smoke', this.info.building, this.info.floor, this.info.box, "cnt_smoke");
+    t.getValue(t, 'people', this.info.building, this.info.floor, this.info.box, "cnt_people");
   }
 
   componentDidMount() {
