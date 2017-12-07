@@ -26,7 +26,7 @@ var acp = {};
 conf.useprotocol = 'http'; // select one for 'http' or 'mqtt' or 'coap' or 'ws'
 
 // build cse
-cse.host        = 'localhost';
+cse.host = '192.168.0.15';
 cse.port        = '7579';
 cse.name        = 'Mobius';
 cse.id          = '/Mobius';
@@ -49,7 +49,7 @@ ae.tasport = '3105';
 
 var building = 'Gwanggaeto_gwan';
 var floor = 'F1';
-var box = 'ML_box_1';
+var box = 'ML_box_5';
 
 
 // build cnt
@@ -72,35 +72,26 @@ cnt_arr[count++].name = 'cnt_smoke';
 cnt_arr[count] = {};
 cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor + '/' + box;
 cnt_arr[count++].name = 'cnt_people';
+cnt_arr[count] = {};
+cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor + '/' + box;
+cnt_arr[count++].name = 'cnt_led_green';
+cnt_arr[count] = {};
+cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floor + '/' + box;
+cnt_arr[count++].name = 'cnt_led_red';
 //cnt_arr[count] = {};
 //cnt_arr[count].parent = '/' + cse.name + '/' + ae.name;
 //cnt_arr[count++].name = 'cnt-timer';
 
 // build sub
-//count = 0;
-//sub_arr[count] = {};
-//sub_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + cnt_arr[1].name;
-//sub_arr[count].name = 'sub-ctrl';
-//sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id;
-
-//sub_arr[count] = {};
-//sub_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + cnt_arr[1].name;
-//sub_arr[count].name = 'sub-ctrl2';
-
-//var ip = require("ip");
-//sub_arr[count++].nu = conf.useprotocol + '://' + ip.address() + ':' + ae.port + '/noti';
-
-//sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id + '?rcn=9';
-//sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id + '?ct=' + ae.bodytype;
-//var ip = require("ip");
-//sub_arr[count++].nu = 'http://' + ip.address() + ':' + ae.port + '/noti';
-//sub_arr[count++].nu = 'coap://203.254.173.104:' + ae.port + '/noti';
-
-// build acp: not complete
-//acp.parent = '/' + cse.name + '/' + ae.name;
-//acp.name = 'acp-' + ae.name;
-//acp.id = ae.id;
-
+count = 0;
+sub_arr[count] = {};
+sub_arr[count].parent = cnt_arr[6].parent + '/' + cnt_arr[6].name;
+sub_arr[count].name = 'sub_led_green';
+sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id + '?ct=' + ae.bodytype;
+sub_arr[count] = {};
+sub_arr[count].parent = cnt_arr[7].parent + '/' + cnt_arr[7].name;
+sub_arr[count].name = 'sub_led_red';
+sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id + '?ct=' + ae.bodytype;
 
 conf.usesecure  = 'disable';
 

@@ -1,13 +1,57 @@
 var conf = require('./conf');
 var Mcp3008 = require('mcp3008.js');
+var Gpio = require('onoff').Gpio; //include onoff to interact with the GPIO
 
 var adc = new Mcp3008();
 var tempChannel = 0;
 var smokeChannel = 1;
 var irChannel = 2;
-var chanceOfFire = 0.00001;
+var greenLedPin = 20;
+var redLedPin = 21;
+
+
+var greenLED = new Gpio(greenLedPin, 'out'); //use GPIO pin 4, and specify that it is output
+var redLED = new Gpio(redLedPin, 'out');
+
+setInterval(blinkLeds, 250);
+
+function blinkLeds() {
+	if (greenLED.readSync() == 0) {
+		greenLED.writeSync(1);
+		redLED.writeSync(1);
+	}
+	else {
+		greenLED.writeSync(0);
+		redLED.writeSync(0);
+	}
+}
+
+var thresholds = {
+	temp: 50,
+	smoke: 1.5,
+	people: 500
+};
 
 setInterval(getValues, 1000);
+
+// ready for mqtt
+for (var i = 0; i < conf.sub.length; i++) {
+	if (conf.sub[i].name != null) {
+		if (url.parse(conf.sub[i].nu).protocol === 'http:') {
+			HTTP_SUBSCRIPTION_ENABLE = 1;
+			if (url.parse(conf.sub[i]['nu']).hostname === 'autoset') {
+				conf.sub[i]['nu'] = 'http://' + ip.address() + ':' + conf.ae.port + url.parse(conf.sub[i]['nu']).pathname;
+			}
+		}
+		else if (url.parse(conf.sub[i].nu).protocol === 'mqtt:') {
+			MQTT_SUBSCRIPTION_ENABLE = 1;
+		}
+		else {
+			console.log('notification uri of subscription is not supported');
+			process.exit();
+		}
+	}
+}
 
 // Check if AE exists and create if not
 getValue(conf.ae, '2', function (status, res_body, to) {
@@ -57,31 +101,39 @@ function checkIfContainerExists() {
 
 function getTemp() {
 	adc.read(tempChannel, function (value) {
-		var mVolts = value * (3300.0 / 1024.0);
-		var temp = ((mVolts - 100.0) / 10.0) - 40.0;
+		var mVolts = value * 5000.0 / 1024.0;
+		var temp = (mVolts - 100.0) / 10.0 - 40.0;
 		var name = 'cnt_temp';
 		var cin = { ctname: name, con: temp };
-		sendDataToServer(JSON.stringify(cin));
+		sendDataToServer(cin);
+		if (temp > thresholds.temp) {
+			// Fire
+		}
 	});
 }
 
 function getSmoke() {
-		adc.read(smokeChannel, function (value) {
-			var volt = value / 1024.0 * 3.3;
-			var RS = (3.3 - volt) / volt;
-			var R0 = 1.6;
-			var ratio = RS / R0;
-			var name = 'cnt_smoke';
-			var cin = { ctname: name, con: ratio };
-			sendDataToServer(JSON.stringify(cin));
-		});
+	adc.read(smokeChannel, function (value) {
+		var volt = value / 1024.0 * 5.0;
+		var RS = (5.0 - volt) / volt;
+		var R0 = 1.6;
+		var ratio = RS / R0;
+		var name = 'cnt_smoke';
+		console.log('ratio', ratio);
+		var cin = { ctname: name, con: ratio };
+		sendDataToServer(cin);
+		if (ratio < thresholds.smoke) {
+			// Fire
+		}
+	});
 }
 
 function getIR() {
-	adc.read(irChannel, function (people) {
+	adc.read(irChannel, function (value) {
 		var name = 'cnt_people';
+		var people = value > thresholds.people ? 1 : 0;
 		var cin = { ctname: name, con: people };
-		sendDataToServer(JSON.stringify(cin));
+		sendDataToServer(cin);
 	});
 }
 
@@ -91,15 +143,9 @@ function getValues() {
 	getIR();
 }
 
-function getRandomValue(min, max) {
-	return Math.round(Math.random() * (max - min) + min);
-}
-
 function sendDataToServer(data) {
-
-	var jsonObj = JSON.parse(data);
-	var ctname = jsonObj.ctname;
-	var content = jsonObj.con;
+	var ctname = data.ctname;
+	var content = data.con;
 
 	for (var j = 0; j < conf.cnt.length; j++) {
 		if (conf.cnt[j].name == ctname) {
@@ -263,7 +309,7 @@ function http_request(path, method, ty, bodyString, callback) {
 	}
 
 	if (ty != '-1') {
-		var a = (ty === '') ? '' : ('; ty=' + ty);
+		var a = ty === '' ? '' : '; ty=' + ty;
 		options.headers['Content-Type'] = 'application/vnd.onem2m-res+' + conf.ae.bodytype + a;
 	}
 

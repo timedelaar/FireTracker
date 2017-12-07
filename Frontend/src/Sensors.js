@@ -55,13 +55,10 @@ class Sensors extends Component {
         return response.json();
       })
       .then(responseJson => {
-        t.setState(prevState => {
-          if (responseJson["m2m:cin"]) {
-            console.log('holaaa')
-            return { prevState, [value]: responseJson["m2m:cin"].con };
-          } else {
-            return { prevState }
-          }
+		  t.setState(prevState => {
+			  if (typeof responseJson["m2m:cin"] != 'undefined')
+				  return { prevState, [value]: responseJson["m2m:cin"].con };
+			  return {prevState, [value]: 0 }
         });
       })
       .catch(error => {

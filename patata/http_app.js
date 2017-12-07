@@ -335,14 +335,15 @@ function mqtt_connect(serverip, noti_topic) {
         };
     }
 
-    var _mqtt_client = mqtt.connect(connectOptions);
+	var mqtt_client = mqtt.connect(connectOptions);
+	global.mqtt_client = mqtt_client;
 
-    _mqtt_client.on('connect', function () {
-        _mqtt_client.subscribe(noti_topic);
+    mqtt_client.on('connect', function () {
+        mqtt_client.subscribe(noti_topic);
         console.log('[mqtt_connect] noti_topic : ' + noti_topic);
     });
 
-    _mqtt_client.on('message', function (topic, message) {
+    mqtt_client.on('message', function (topic, message) {
 
         var topic_arr = topic.split("/");
 
@@ -389,7 +390,7 @@ function mqtt_connect(serverip, noti_topic) {
         }
     });
 
-    _mqtt_client.on('error', function (err) {
+    mqtt_client.on('error', function (err) {
         console.log(err.message);
     });
 }

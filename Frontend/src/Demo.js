@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import { Grid, Row, Col } from "react-flexbox-grid";
-import arch_wr from "./arch_wr.png";
-import firesmall from "./firesmall.png";
+import room from "./arch_wr.png";
+import onfire from "./onfire.png";
 import Sensors from "./Sensors";
 import * as Konva from 'konva';
 import $ from "jquery";
@@ -859,6 +859,8 @@ const div_style = {
 var grid_path = null;
 var sel = null;
 
+
+
 class Demo extends Component {
 
   componentDidMount() {
@@ -982,3 +984,9 @@ class Demo extends Component {
 }
 
 export default Demo;
+
+/*
+<Col xs={6}>
+          <img src={onfire} alt="room is burning" />
+</Col>
+*/
