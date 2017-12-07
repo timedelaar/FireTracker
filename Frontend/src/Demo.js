@@ -755,9 +755,11 @@ function create_grid(x, y) {
     }
   }
 
+  /*
   boxes_position.forEach(element => {
     crate_box(element[0], element[1])
   });
+  */
 
   layer.draw();
   console.log(grid);
@@ -793,12 +795,12 @@ function load_sample_floor() {
 }
 
 function GetInfo() {
-  getInformation();
-  setInterval(getInformation, 10000);
+  //getInformation();
+  //setInterval(getInformation, 10000);
 }
 
 function getInformation(){
-  for (var i = 0; i < boxes_position.length; i++){
+  /*for (var i = 0; i < boxes_position.length; i++){
     var box = grid[boxes_position[i][0]][boxes_position[i][1]]
     for (var j = 1; j < 4; j++){
       var sensor_type = '';
@@ -839,7 +841,7 @@ function getInformation(){
         });
     }
 
-  }
+  }*/
 }
 
 function set_exit(x, y) {
