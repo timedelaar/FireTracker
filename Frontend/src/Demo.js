@@ -676,15 +676,15 @@ function crate_box(i, j) {
       stroke: 'yellow',
       strokeWidth: '1'
     }),
-    temperature: 0,
-    smoke: 0,
-    people: 0
+    cnt_temperature: 0,
+    cnt_smoke: 0,
+    cnt_people: 0
   }
 
   sqrt.rect.on('mouseenter', function () {
-    $('#sensor1').val(sqrt.temperature);
-    $('#sensor2').val(sqrt.smoke);
-    $('#sensor3').val(sqrt.people);
+    $('#sensor1').val(sqrt.cnt_temp);
+    $('#sensor2').val(sqrt.cnt_smoke);
+    $('#sensor3').val(sqrt.cnt_people);
     $('#coordinates').val('x:' + sqrt.x + '  y:' + sqrt.y);
   })
 
@@ -755,11 +755,11 @@ function create_grid(x, y) {
     }
   }
 
-  /*
+
   boxes_position.forEach(element => {
     crate_box(element[0], element[1])
   });
-  */
+
 
   layer.draw();
   console.log(grid);
@@ -794,54 +794,71 @@ function load_sample_floor() {
   });
 }
 
+var boxes_position = [
+  [3, 3], [2, 5], [3, 12], [3, 16], [3, 21],
+  [9, 5], [9, 12], [9, 16], [9, 21],
+  [11, 2], [15, 2], [21, 2],
+  [11, 7], [15, 7], [21, 7]
+];
+
 function GetInfo() {
-  //getInformation();
-  //setInterval(getInformation, 10000);
+  getInformation();
+  setInterval(getInformation, 10000);
 }
 
-function getInformation(){
-  /*for (var i = 0; i < boxes_position.length; i++){
-    var box = grid[boxes_position[i][0]][boxes_position[i][1]]
-    for (var j = 1; j < 4; j++){
-      var sensor_type = '';
-      switch (j){
-        case 1:
-        sensor_type = 'cnt_temp';
-        break;
-        case 2:
-        sensor_type = 'cnt_smoke';
-        break;
-        case 3:
-        sensor_type = 'cnt_people';
-        break;
-      }
-      fetch(
-        "http://localhost:7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/ML_box_5/" + sensor_type + "/latest",
-        {
-          method: "GET",
-          headers: {
-            "X-M2M-RI": "12345",
-            "X-M2M-Origin": "SOrigin",
-            Accept: "application/json"
-          }
-        }
-      )
-        .then(response => {
-          return response.json();
-        })
-        .then(responseJson => {
-            if (responseJson["m2m:cin"]) {
-              console.log(j);
-              box.temperature = responseJson["m2m:cin"].con
-              console.log(responseJson["m2m:cin"].con);
-            }
-        })
-        .catch(error => {
-          console.error("Error in informationservice", error);
-        });
-    }
+function getInformation() {
+  get_data(1, 1)
+}
 
-  }*/
+function get_data(n, type) {
+
+  var sensor_type = 'na'
+  switch (type) {
+    case 1:
+      var sensor_type = 'cnt_temp';
+      break;
+    case 2:
+      var sensor_type = 'cnt_smoke';
+      break;
+    case 3:
+      var sensor_type = 'cnt_people';
+      break;
+  }
+
+  fetch(
+    "http://localhost:7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/ML_box_" + n + "/" + sensor_type + "/latest",
+    {
+      method: "GET",
+      headers: {
+        "X-M2M-RI": "12345",
+        "X-M2M-Origin": "SOrigin",
+        Accept: "application/json"
+      }
+    }
+  )
+    .then(response => {
+      return response.json();
+    })
+    .then(responseJson => {
+      console.log(responseJson)
+      if (responseJson["m2m:cin"]) {
+        var box = grid[boxes_position[n - 1][0]][boxes_position[n - 1][1]]
+        console.log(box);
+        box[sensor_type] = responseJson["m2m:cin"].con
+      }
+
+      //We do not need to sense human presense yet
+      if (type < 3) {
+        if ((n + 1) > 15) {
+          get_data(1, type + 1)
+        } else {
+          get_data(n + 1, type)
+        }
+      }
+    })
+    .catch(error => {
+      console.error("Error in informationservice", error);
+    });
 }
 
 function set_exit(x, y) {
@@ -878,10 +895,10 @@ class Demo extends Component {
     stage.add(layer);
 
     //Create row of rooms
-    grid_path = new PF.Grid(1000, 1000); 
+    grid_path = new PF.Grid(1000, 1000);
     create_grid(1000, 1000);
     load_sample_floor();
-    
+
     //Find path in case of fire, work on fire trigger
     var finder = new PF.AStarFinder({
       allowDiagonal: true
@@ -903,80 +920,80 @@ class Demo extends Component {
           <br />
           <Row>
             <div style={div_style}>
-            <Col xs={3}>
-              <Row>
-                <TextField
-                  id="sensor1"
-                  label="Temperature Sensor"
-                  hintText="Placeholder for value"
-                  errorText="Temperature Sensor"
-                  errorStyle={styles.errorStyle}
-                  value="NaN"
-                  onChange={event =>
-                    this.setState({ sensor1: event.target.value })
-                  }
-                  margin="normal"
-                />
-                <br />
-                <br />
-                <br />
-              </Row>
-              <Row>
-                <TextField
-                  id="sensor2"
-                  label="Smoke Sensor"
-                  hintText="Placeholder for value"
-                  errorText="Smoke Sensor"
-                  errorStyle={styles.errorStyle}
-                  value="NaN"
-                  onChange={event =>
-                    this.setState({ smoke: event.target.value })
-                  }
-                  margin="normal"
-                />
+              <Col xs={3}>
+                <Row>
+                  <TextField
+                    id="sensor1"
+                    label="Temperature Sensor"
+                    hintText="Placeholder for value"
+                    errorText="Temperature Sensor"
+                    errorStyle={styles.errorStyle}
+                    value="NaN"
+                    onChange={event =>
+                      this.setState({ sensor1: event.target.value })
+                    }
+                    margin="normal"
+                  />
+                  <br />
+                  <br />
+                  <br />
+                </Row>
+                <Row>
+                  <TextField
+                    id="sensor2"
+                    label="Smoke Sensor"
+                    hintText="Placeholder for value"
+                    errorText="Smoke Sensor"
+                    errorStyle={styles.errorStyle}
+                    value="NaN"
+                    onChange={event =>
+                      this.setState({ smoke: event.target.value })
+                    }
+                    margin="normal"
+                  />
 
-                <br />
-                <br />
-                <br />
-              </Row>
-              <Row>
-                <TextField
-                  id="sensor3"
-                  label="Infrared Sensor"
-                  hintText="Placeholder for value"
-                  errorText="Infrared Sensor"
-                  errorStyle={styles.errorStyle}
-                  value="NaN"
-                  onChange={event =>
-                    this.setState({ people: event.target.value })
-                  }
-                  margin="normal"
-                />
-                <br />
-                <br />
-                <br />
-              </Row>
-              <Row>
-                <TextField
-                  id="coordinates"
-                  label="Coordinates"
-                  hintText="Placeholder for value"
-                  errorText="Coordinates"
-                  errorStyle={styles.errorStyle}
-                  value="NaN"
-                  onChange={event =>
-                    this.setState({ people: event.target.value })
-                  }
-                  margin="normal"
-                />
-                <br />
-                <br />
-                <br />
-              </Row>
-            </Col>
+                  <br />
+                  <br />
+                  <br />
+                </Row>
+                <Row>
+                  <TextField
+                    id="sensor3"
+                    label="Infrared Sensor"
+                    hintText="Placeholder for value"
+                    errorText="Infrared Sensor"
+                    errorStyle={styles.errorStyle}
+                    value="NaN"
+                    onChange={event =>
+                      this.setState({ people: event.target.value })
+                    }
+                    margin="normal"
+                  />
+                  <br />
+                  <br />
+                  <br />
+                </Row>
+                <Row>
+                  <TextField
+                    id="coordinates"
+                    label="Coordinates"
+                    hintText="Placeholder for value"
+                    errorText="Coordinates"
+                    errorStyle={styles.errorStyle}
+                    value="NaN"
+                    onChange={event =>
+                      this.setState({ people: event.target.value })
+                    }
+                    margin="normal"
+                  />
+                  <br />
+                  <br />
+                  <br />
+                </Row>
+              </Col>
             </div>
             <Col xs={7}>
-            <div width={1000} height={1000} id="container-js"></div>
+              <div width={1000} height={1000} id="container-js"></div>
             </Col>
           </Row>
         </Grid>
