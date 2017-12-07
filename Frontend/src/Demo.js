@@ -8,7 +8,9 @@ import * as Konva from 'konva';
 import $ from "jquery";
 import TextField from "material-ui/TextField";
 import { grey900, amber900 } from "material-ui/styles/colors";
-import PF from "pathfinding"
+import PF from "pathfinding";
+
+const host = "192.168.0.15";
 
 const styles = {
   errorStyle: {
@@ -812,7 +814,7 @@ function getInformation() {
 }
 
 function setBoxLed(box, led, value) {
-	fetch("http://localhost:7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/" + box + "/" + led,
+	fetch("http://" + host +":7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/" + box + "/" + led,
 		{
 			headers: {
 				"Accept": "application/json",
@@ -840,7 +842,7 @@ function get_data(n, type) {
   }
 
   fetch(
-    "http://localhost:7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/ML_box_" + n + "/" + sensor_type + "/latest",
+    "http://" + host + ":7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/ML_box_" + n + "/" + sensor_type + "/latest",
     {
       method: "GET",
       headers: {
