@@ -930,6 +930,29 @@ function calculate_paths() {
       var grid_back = grid_path.clone();
     }
 
+    if (selected_path.length == 0){
+      var box_trapped = grid[paths_starts[i][0]][paths_starts[i][1]]
+
+      var complexText = new Konva.Text({
+        x: parseInt(box_trapped.x * 40),
+        y: parseInt(box_trapped.y * 40),
+        text: 'P',
+        fontSize: 25,
+        fontFamily: 'Calibri',
+        fill: '#555',
+        width: 40,
+        height: 40,
+        padding: 0,
+        align: 'center'
+      });
+
+      layer.add(complexText);
+      
+      if(box_trapped.active == false){
+        box_trapped.rect.setFill("yellow");
+      }
+    }
+
     var final_array = [];
     selected_path.forEach(element1 => {
       element1.forEach(element2 => {
