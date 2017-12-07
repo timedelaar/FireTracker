@@ -814,16 +814,17 @@ function getInformation() {
 }
 
 function setBoxLed(box, led, value) {
-	fetch("http://" + host +":7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/" + box + "/" + led,
-		{
-			headers: {
-				"Accept": "application/json",
-				"X-M2M-RI": "12345",
-				"X-M2M-Origin": "SOrigin",
-				"Content-Type": "application/vnd.onem2m-res+json; ty=4"
-			},
-			body: "{ \"m2m:cin\": { \"con\": \"" + value + "\" } }"
-		});
+  fetch("http://" + host + ":7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/" + box + "/" + led,
+    {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "X-M2M-RI": "12345",
+        "X-M2M-Origin": "SOrigin",
+        "Content-Type": "application/vnd.onem2m-res+json; ty=4"
+      },
+      body: "{ \"m2m:cin\": { \"con\": \"" + value + "\" } }"
+    });
 }
 
 function get_data(n, type) {
@@ -860,11 +861,12 @@ function get_data(n, type) {
       if (responseJson["m2m:cin"]) {
         var box = grid[boxes_position[n - 1][0]][boxes_position[n - 1][1]]
         box[sensor_type] = responseJson["m2m:cin"].con
-        if (parseFloat(responseJson["m2m:cin"].con) < 2 && type == 2) {
+        if (parseFloat(responseJson["m2m:cin"].con) < 5 && type == 2) {
           box.rect.setFill("red");
-		  box.active = true;
-		  setBoxLed("ML_box_" + n, "cnt_led_red", 1);
+          box.active = true;
 
+          setBoxLed("ML_box_" + n, "cnt_led_red", 1);
+          setBoxLed("ML_box_" + n, "cnt_led_green", 0);
           for (var i = 0; i < 5; i++) {
             for (var j = 0; j < 5; j++) {
               box = grid[boxes_position[n - 1][0] + i - 2][boxes_position[n - 1][1] + j - 2]
@@ -875,9 +877,15 @@ function get_data(n, type) {
             }
           }
 
+          layer.draw();
+          calculate_paths();
+
         } else {
-			box.rect.setFill("lightgreen");
-			setBoxLed("ML_box_" + n, "cnt_led_green", 1);
+          if (!box.active){
+            box.rect.setFill("lightgreen");
+            setBoxLed("ML_box_" + n, "cnt_led_green", 1);
+            setBoxLed("ML_box_" + n, "cnt_led_red", 0);
+          }
         }
       }
 
@@ -889,10 +897,6 @@ function get_data(n, type) {
           get_data(n + 1, type)
         }
       } else {
-
-        clearInterval(interval);
-        layer.draw();
-        calculate_paths();
       }
     })
     .catch(error => {
@@ -947,7 +951,7 @@ function calculate_paths() {
       var grid_back = grid_path.clone();
     }
 
-    if (selected_path.length == 0){
+    if (selected_path.length == 0) {
       var box_trapped = grid[paths_starts[i][0]][paths_starts[i][1]]
 
       var complexText = new Konva.Text({
@@ -956,7 +960,7 @@ function calculate_paths() {
         text: 'P',
         fontSize: 25,
         fontFamily: 'Calibri',
-        fill: '#555',
+        fill: '#fff',
         width: 40,
         height: 40,
         padding: 0,
@@ -964,8 +968,8 @@ function calculate_paths() {
       });
 
       layer.add(complexText);
-      
-      if(box_trapped.active == false){
+
+      if (box_trapped.active == false) {
         box_trapped.rect.setFill("yellow");
       }
     }
