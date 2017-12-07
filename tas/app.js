@@ -4,7 +4,7 @@
  * Made compatible with Thyme v1.7.2
  */
 
-var onPi = false;
+var onPi = true;
 
 var net = require('net');
 var util = require('util');
@@ -194,8 +194,10 @@ function on_receive(data) {
                             if (download_arr[j].ctname == sink_obj.ctname) {
                                 g_down_buf = JSON.stringify({id: download_arr[j].id, con: sink_obj.con});
 								console.log(g_down_buf + ' <----');
-								if (onPi)
+								if (onPi) {
+									console.log('Switch ' + download_arr[j].id);
 									download_arr[j].led.writeSync(sink_obj.con);
+								}
                                 break;
                             }
                         }
