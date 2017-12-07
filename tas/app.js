@@ -4,7 +4,7 @@
  * Made compatible with Thyme v1.7.2
  */
 
-var onPi = false;
+var onPi = true;
 
 var net = require('net');
 var util = require('util');
@@ -85,6 +85,7 @@ function temp_upload_action() {
 		for (var i = 0; i < upload_arr.length; i++) {
 			if (upload_arr[i].id == 'temp') {
 				if (onPi) {
+					console.log(upload_arr[i].channel);
 					adc.read(upload_arr[i].channel, function (value) {
 						var mVolts = value * 5000.0 / 1024.0;
 						var temp = (mVolts - 100.0) / 10.0 - 40.0;
