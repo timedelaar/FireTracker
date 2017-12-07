@@ -83,29 +83,18 @@ cnt_arr[count++].name = 'cnt_led_red';
 //cnt_arr[count++].name = 'cnt-timer';
 
 // build sub
-//count = 0;
-//sub_arr[count] = {};
-//sub_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + cnt_arr[1].name;
-//sub_arr[count].name = 'sub-ctrl';
-//sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id;
+count = 0;
+sub_arr[count] = {};
 
-//sub_arr[count] = {};
-//sub_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + cnt_arr[1].name;
-//sub_arr[count].name = 'sub-ctrl2';
+sub_arr[count] = {};
+sub_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + cnt_arr[6].name;
+sub_arr[count].name = 'sub_led_green';
+sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id + '?ct=' + ae.bodytype;
 
-//var ip = require("ip");
-//sub_arr[count++].nu = conf.useprotocol + '://' + ip.address() + ':' + ae.port + '/noti';
-
-//sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id + '?rcn=9';
-//sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id + '?ct=' + ae.bodytype;
-//var ip = require("ip");
-//sub_arr[count++].nu = 'http://' + ip.address() + ':' + ae.port + '/noti';
-//sub_arr[count++].nu = 'coap://203.254.173.104:' + ae.port + '/noti';
-
-// build acp: not complete
-//acp.parent = '/' + cse.name + '/' + ae.name;
-//acp.name = 'acp-' + ae.name;
-//acp.id = ae.id;
+sub_arr[count] = {};
+sub_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + cnt_arr[7].name;
+sub_arr[count].name = 'sub_led_red';
+sub_arr[count++].nu = 'mqtt://' + cse.host + '/' + ae.id + '?ct=' + ae.bodytype;
 
 
 conf.usesecure  = 'disable';

@@ -34,6 +34,25 @@ var thresholds = {
 
 setInterval(getValues, 1000);
 
+// ready for mqtt
+for (var i = 0; i < conf.sub.length; i++) {
+	if (conf.sub[i].name != null) {
+		if (url.parse(conf.sub[i].nu).protocol === 'http:') {
+			HTTP_SUBSCRIPTION_ENABLE = 1;
+			if (url.parse(conf.sub[i]['nu']).hostname === 'autoset') {
+				conf.sub[i]['nu'] = 'http://' + ip.address() + ':' + conf.ae.port + url.parse(conf.sub[i]['nu']).pathname;
+			}
+		}
+		else if (url.parse(conf.sub[i].nu).protocol === 'mqtt:') {
+			MQTT_SUBSCRIPTION_ENABLE = 1;
+		}
+		else {
+			console.log('notification uri of subscription is not supported');
+			process.exit();
+		}
+	}
+}
+
 // Check if AE exists and create if not
 getValue(conf.ae, '2', function (status, res_body, to) {
 	if (status == '4004') {
