@@ -26,31 +26,52 @@ var acp = {};
 conf.useprotocol = 'http'; // select one for 'http' or 'mqtt' or 'coap' or 'ws'
 
 // build cse
-cse.host        = 'localhost';
-cse.port        = '7579';
-cse.name        = 'Mobius';
-cse.id          = '/Mobius';
-cse.mqttport    = '1883';
-cse.wsport      = '7577';
+cse.host = 'localhost';
+cse.port = '7579';
+cse.name = 'Mobius';
+cse.id = '/Mobius';
+cse.mqttport = '1883';
+cse.wsport = '7577';
 
 // build ae
-if(aei != 'S') {
-    ae.id = aei;
+if (aei != 'S') {
+	ae.id = aei;
 }
 else {
-    ae.id = 'S';
+	ae.id = 'S';
 }
-ae.parent       = '/' + cse.name;
-ae.name         = 'Firetracker';
-ae.appid        = 'Firetracker';
-ae.port         = '9727';
-ae.bodytype     = 'json'; // select 'json' or 'xml' or 'cbor'
+ae.parent = '/' + cse.name;
+ae.name = 'Firetracker';
+ae.appid = 'Firetracker';
+ae.port = '9727';
+ae.bodytype = 'json'; // select 'json' or 'xml' or 'cbor'
 ae.tasport = '3105';
 
 var building = 'Gwanggaeto_gwan';
-var floors = ['F1', 'F2', 'F3'];
-var boxes = ['ML_box_1', 'ML_box_2', 'ML_box_3', 'ML_box_4'];
+var floors = ['F1'];
+var boxes = [
+	'ML_box_1',
+	'ML_box_2',
+	'ML_box_3',
+	'ML_box_4',
+	'ML_box_5',
+	'ML_box_6',
+	'ML_box_7',
+	'ML_box_8',
+	'ML_box_9',
+	'ML_box_10',
+	'ML_box_11',
+	'ML_box_12',
+	'ML_box_13',
+	'ML_box_14',
+	'ML_box_15'];
 
+var boxes_position = [
+	[3,3],[2,5],[3,12],[3,16],[3,21],
+	[9,5],[9,12],[9,16],[9,21],
+	[11,2],[15,2],[21,2],
+	[11,7],[15,7],[21,7]
+];
 
 // build cnt
 var count = 0;
@@ -61,6 +82,10 @@ for (var i = 0; i < floors.length; i++) {
 	cnt_arr[count] = {};
 	cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building;
 	cnt_arr[count++].name = floors[i];
+	cnt_arr[count] = {};
+	cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i];
+	cnt_arr[count].name = 'box_count';
+	cnt_arr[count++].floor = floors[i];
 	for (var j = 0; j < boxes.length; j++) {
 		cnt_arr[count] = {};
 		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i];
@@ -80,6 +105,9 @@ for (var i = 0; i < floors.length; i++) {
 		cnt_arr[count] = {};
 		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
 		cnt_arr[count++].name = 'cnt_led_red';
+		cnt_arr[count] = {};
+		cnt_arr[count].parent = '/' + cse.name + '/' + ae.name + '/' + building + '/' + floors[i] + '/' + boxes[j];
+		cnt_arr[count++].name = 'metadata';
 	}
 }
 //cnt_arr[count] = {};
@@ -112,10 +140,10 @@ for (var i = 0; i < floors.length; i++) {
 //acp.id = ae.id;
 
 
-conf.usesecure  = 'disable';
+conf.usesecure = 'disable';
 
-if(conf.usesecure === 'enable') {
-    cse.mqttport = '8883';
+if (conf.usesecure === 'enable') {
+	cse.mqttport = '8883';
 }
 
 conf.cse = cse;
@@ -125,6 +153,7 @@ conf.sub = sub_arr;
 conf.acp = acp;
 conf.floors = floors;
 conf.boxes = boxes;
+conf.boxes_position = boxes_position;
 
 
 module.exports = conf;
