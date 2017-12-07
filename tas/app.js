@@ -4,19 +4,21 @@
  * Made compatible with Thyme v1.7.2
  */
 
+var onPi = false;
+
 var net = require('net');
 var util = require('util');
 var fs = require('fs');
 var xml2js = require('xml2js');
-var Mcp3008 = require('mcp3008.js');
-//var gpio = require('onoff').Gpio;  // Uncomment to use real sensor values
+var Mcp3008 = onPi ? require('mcp3008.js') : null;
+var gpio = onPi ? require('onoff').Gpio : null;
 
 
 var wdt = require('./wdt');
 
 var useparentport = '';
 var useparenthostname = '';
-//var adc = new Mcp3008(); // Uncomment to use real sensor values
+var adc = Mcp3008 != null ? new Mcp3008() : null;
 
 var upload_arr = [];
 var download_arr = [];
@@ -58,7 +60,7 @@ fs.readFile('conf.xml', 'utf-8', function (err, data) {
                     }
                     else {
 						download_arr = conf.download;
-						if (typeof gpio !== 'undefined') {
+						if (onPi) {
 							for (var i = 0; i < download_arr.length; i++) {
 								download_arr[i].led = new gpio(download_arr[i].channel, 'out');
 							}
@@ -82,7 +84,7 @@ function temp_upload_action() {
 	if (tas_state == 'upload') {
 		for (var i = 0; i < upload_arr.length; i++) {
 			if (upload_arr[i].id == 'temp') {
-				if (typeof adc !== 'undefined') {
+				if (onPi) {
 					adc.read(upload_arr[i].channel, function (value) {
 						var mVolts = value * 5000.0 / 1024.0;
 						var temp = (mVolts - 100.0) / 10.0 - 40.0;
@@ -93,7 +95,7 @@ function temp_upload_action() {
 					});
 				}
 				else {
-					prepare_data(upload_arr[i].ctname, 0);
+					prepare_data(upload_arr[i].ctname, 20);
 				}
 				break;
 			}
@@ -105,7 +107,7 @@ function smoke_upload_action() {
 	if (tas_state == 'upload') {
 		for (var i = 0; i < upload_arr.length; i++) {
 			if (upload_arr[i].id == 'smoke') {
-				if (typeof adc !== 'undefined') {
+				if (onPi) {
 					adc.read(upload_arr[i].channel, function (value) {
 						var volt = value / 1024.0 * 5.0;
 						var RS = (5.0 - volt) / volt;
@@ -130,7 +132,7 @@ function people_upload_action() {
 	if (tas_state == 'upload') {
 		for (var i = 0; i < upload_arr.length; i++) {
 			if (upload_arr[i].id == 'people') {
-				if (typeof adc !== 'undefined') {
+				if (onPi) {
 					adc.read(upload_arr[i].channel, function (value) {
 						var people = value > thresholds.people ? 1 : 0;
 						prepare_data(upload_arr[i].ctname, people);

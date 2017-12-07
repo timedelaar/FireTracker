@@ -6,7 +6,7 @@ import { grey900, amber900 } from "material-ui/styles/colors";
 
 const building = "Gwanggaeto_gwan";
 const floor = "F1";
-const box = "ML_box_5";
+const box = "ML_box_6";
 
 const styles = {
   errorStyle: {
@@ -52,8 +52,10 @@ class Sensors extends Component {
         return response.json();
       })
       .then(responseJson => {
-        t.setState(prevState => {
-          return { prevState, [value]: responseJson["m2m:cin"].con };
+		  t.setState(prevState => {
+			  if (typeof responseJson["m2m:cin"] != 'undefined')
+				  return { prevState, [value]: responseJson["m2m:cin"].con };
+			  return {prevState, [value]: 0 }
         });
       })
       .catch(error => {
