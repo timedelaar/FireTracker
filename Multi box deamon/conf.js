@@ -66,13 +66,6 @@ var boxes = [
 	'ML_box_14',
 	'ML_box_15'];
 
-var boxes_position = [
-	[3,3],[2,5],[3,12],[3,16],[3,21],
-	[9,5],[9,12],[9,16],[9,21],
-	[11,2],[15,2],[21,2],
-	[11,7],[15,7],[21,7]
-];
-
 // build cnt
 var count = 0;
 cnt_arr[count] = {};
@@ -153,7 +146,6 @@ conf.sub = sub_arr;
 conf.acp = acp;
 conf.floors = floors;
 conf.boxes = boxes;
-conf.boxes_position = boxes_position;
 
 
 module.exports = conf;
