@@ -54,7 +54,6 @@ var boxes = [
 	'ML_box_2',
 	'ML_box_3',
 	'ML_box_4',
-	'ML_box_5',
 	'ML_box_6',
 	'ML_box_7',
 	'ML_box_8',
