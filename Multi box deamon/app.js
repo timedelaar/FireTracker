@@ -25,7 +25,9 @@ getValue(conf.ae, '2', function (status, res_body, to) {
 var count = 0;
 function checkIfContainerExists() {
 	if (count == conf.cnt.length) {
-		setInterval(getTemp, 1000);
+		setInterval(getTemp, 3000);
+		setInterval(getSmoke, 3000);
+		setInterval(getPeople, 3000);
 		return;
 	}
 	var container = conf.cnt[count];
@@ -54,6 +56,28 @@ function getTemp() {
 	for (var i = 0; i < conf.floors.length; i++) {
 		for (var j = 0; j < conf.boxes.length; j++) {
 			var temp = getRandomValue(18, 22);
+			var name = 'cnt_temp';
+			var cin = { ctname: name, con: temp };
+			sendDataToServer(conf.floors[i], conf.boxes[j], JSON.stringify(cin));
+		}
+	}
+}
+
+function getSmoke() {
+	for (var i = 0; i < conf.floors.length; i++) {
+		for (var j = 0; j < conf.boxes.length; j++) {
+			var temp = getRandomValue(9, 10);
+			var name = 'cnt_temp';
+			var cin = { ctname: name, con: temp };
+			sendDataToServer(conf.floors[i], conf.boxes[j], JSON.stringify(cin));
+		}
+	}
+}
+
+function getPeople() {
+	for (var i = 0; i < conf.floors.length; i++) {
+		for (var j = 0; j < conf.boxes.length; j++) {
+			var temp = getRandomValue(0, 1);
 			var name = 'cnt_temp';
 			var cin = { ctname: name, con: temp };
 			sendDataToServer(conf.floors[i], conf.boxes[j], JSON.stringify(cin));

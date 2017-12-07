@@ -8,7 +8,9 @@ import * as Konva from 'konva';
 import $ from "jquery";
 import TextField from "material-ui/TextField";
 import { grey900, amber900 } from "material-ui/styles/colors";
-import PF from "pathfinding"
+import PF from "pathfinding";
+
+const host = "192.168.0.15";
 
 const styles = {
   errorStyle: {
@@ -811,6 +813,19 @@ function getInformation() {
   get_data(1, 1)
 }
 
+function setBoxLed(box, led, value) {
+	fetch("http://" + host +":7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/" + box + "/" + led,
+		{
+			headers: {
+				"Accept": "application/json",
+				"X-M2M-RI": "12345",
+				"X-M2M-Origin": "SOrigin",
+				"Content-Type": "application/vnd.onem2m-res+json; ty=4"
+			},
+			body: "{ \"m2m:cin\": { \"con\": \"" + value + "\" } }"
+		});
+}
+
 function get_data(n, type) {
 
   var sensor_type = 'na'
@@ -827,7 +842,7 @@ function get_data(n, type) {
   }
 
   fetch(
-    "http://localhost:7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/ML_box_" + n + "/" + sensor_type + "/latest",
+    "http://" + host + ":7579/Mobius/Firetracker/Gwanggaeto_gwan/F1/ML_box_" + n + "/" + sensor_type + "/latest",
     {
       method: "GET",
       headers: {
@@ -847,7 +862,8 @@ function get_data(n, type) {
         box[sensor_type] = responseJson["m2m:cin"].con
         if (parseFloat(responseJson["m2m:cin"].con) < 2 && type == 2) {
           box.rect.setFill("red");
-          box.active = true;
+		  box.active = true;
+		  setBoxLed("ML_box_" + n, "cnt_led_red", 1);
 
           for (var i = 0; i < 5; i++) {
             for (var j = 0; j < 5; j++) {
@@ -860,7 +876,8 @@ function get_data(n, type) {
           }
 
         } else {
-          box.rect.setFill("lightgreen");
+			box.rect.setFill("lightgreen");
+			setBoxLed("ML_box_" + n, "cnt_led_green", 1);
         }
       }
 

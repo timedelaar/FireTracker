@@ -94,7 +94,7 @@ function temp_upload_action() {
 					adc.read(parseInt(upload_arr[i].channel), function (value) {
 						var mVolts = value * 5000.0 / 1024.0;
 						var temp = (mVolts - 100.0) / 10.0 - 40.0;
-						prepare_data(upload_arr[i].ctname, temp);
+						prepare_data(upload_arr[i].ctname, temp.toFixed(1));
 						if (temp > thresholds.temp) {
 							// Fire
 						}
@@ -119,7 +119,7 @@ function smoke_upload_action() {
 						var RS = (5.0 - volt) / volt;
 						var R0 = 3.55;
 						var ratio = RS / R0;
-						prepare_data(upload_arr[i].ctname, ratio);
+						prepare_data(upload_arr[i].ctname, ratio.toFixed(1));
 						if (ratio < thresholds.smoke) {
 							// Fire
 						}
