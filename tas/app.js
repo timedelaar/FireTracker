@@ -20,6 +20,12 @@ var useparentport = '';
 var useparenthostname = '';
 var adc = Mcp3008 != null ? new Mcp3008() : null;
 
+var thresholds = {
+	temp: 50,
+	smoke: 1.5,
+	people: 500
+};
+
 var upload_arr = [];
 var download_arr = [];
 
