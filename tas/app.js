@@ -117,7 +117,7 @@ function smoke_upload_action() {
 					adc.read(parseInt(upload_arr[i].channel), function (value) {
 						var volt = value / 1024.0 * 5.0;
 						var RS = (5.0 - volt) / volt;
-						var R0 = 10;
+						var R0 = 3.55;
 						var ratio = RS / R0;
 						prepare_data(upload_arr[i].ctname, ratio);
 						if (ratio < thresholds.smoke) {
