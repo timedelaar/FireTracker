@@ -117,7 +117,7 @@ function smoke_upload_action() {
 					adc.read(parseInt(upload_arr[i].channel), function (value) {
 						var volt = value / 1024.0 * 5.0;
 						var RS = (5.0 - volt) / volt;
-						var R0 = 1.6;
+						var R0 = 10;
 						var ratio = RS / R0;
 						prepare_data(upload_arr[i].ctname, ratio);
 						if (ratio < thresholds.smoke) {
@@ -195,7 +195,6 @@ function on_receive(data) {
                                 g_down_buf = JSON.stringify({id: download_arr[j].id, con: sink_obj.con});
 								console.log(g_down_buf + ' <----');
 								if (onPi) {
-									console.log('Switch ' + download_arr[j].id);
 									download_arr[j].led.writeSync(parseInt(sink_obj.con));
 								}
                                 break;
