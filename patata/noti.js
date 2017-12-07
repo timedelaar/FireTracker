@@ -75,7 +75,8 @@ exports.response_mqtt = function (rsp_topic, rsc, to, fr, rqi, inpc, bodytype) {
     rsp_message['m2m:rsp'].to = to;
     rsp_message['m2m:rsp'].fr = fr;
     rsp_message['m2m:rsp'].rqi = rqi;
-    rsp_message['m2m:rsp'].pc = inpc;
+	rsp_message['m2m:rsp'].pc = inpc;
+	var mqtt_client = global.mqtt_client;
 
     if(bodytype === 'xml') {
         rsp_message['m2m:rsp']['@'] = {

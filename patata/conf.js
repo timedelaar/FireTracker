@@ -26,7 +26,7 @@ var acp = {};
 conf.useprotocol = 'http'; // select one for 'http' or 'mqtt' or 'coap' or 'ws'
 
 // build cse
-cse.host        = '192.168.0.15';
+cse.host = 'localhost';//'192.168.0.15';
 cse.port        = '7579';
 cse.name        = 'Mobius';
 cse.id          = '/Mobius';
@@ -49,7 +49,7 @@ ae.tasport = '3105';
 
 var building = 'Gwanggaeto_gwan';
 var floor = 'F1';
-var box = 'ML_box_6';
+var box = 'ML_box_5';
 
 
 // build cnt
