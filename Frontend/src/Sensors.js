@@ -4,6 +4,10 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { Grid, Row, Col } from "react-flexbox-grid";
 import { grey900, amber900 } from "material-ui/styles/colors";
 
+const building = "Gwanggaeto_gwan";
+const floor = "F1";
+const box = "ML_box_5";
+
 const styles = {
   errorStyle: {
     color: grey900
