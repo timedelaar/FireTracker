@@ -26,7 +26,7 @@ var acp = {};
 conf.useprotocol = 'http'; // select one for 'http' or 'mqtt' or 'coap' or 'ws'
 
 // build cse
-cse.host = 'localhost';//'192.168.0.15';
+cse.host = '192.168.0.15';
 cse.port        = '7579';
 cse.name        = 'Mobius';
 cse.id          = '/Mobius';
