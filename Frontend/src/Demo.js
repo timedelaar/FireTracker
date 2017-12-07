@@ -789,7 +789,6 @@ function load_sample_floor() {
     var active = sqrt.active = element[2];
     if (active) {
       sqrt.rect.setFill('darkgrey');
-      grid_path.setWalkableAt(element[0], element[1], false);
     }
   });
 }
@@ -801,9 +800,11 @@ var boxes_position = [
   [11, 7], [15, 7], [21, 7]
 ];
 
+var interval = null;
+
 function GetInfo() {
   getInformation();
-  setInterval(getInformation, 10000);
+  interval = setInterval(getInformation, 10000);
 }
 
 function getInformation() {
@@ -843,8 +844,24 @@ function get_data(n, type) {
       console.log(responseJson)
       if (responseJson["m2m:cin"]) {
         var box = grid[boxes_position[n - 1][0]][boxes_position[n - 1][1]]
-        console.log(box);
         box[sensor_type] = responseJson["m2m:cin"].con
+        if (parseFloat(responseJson["m2m:cin"].con) < 2 && type == 2) {
+          box.rect.setFill("red");
+          box.active = true;
+
+          for (var i = 0; i < 5; i++) {
+            for (var j = 0; j < 5; j++) {
+              box = grid[boxes_position[n - 1][0] + i - 2][boxes_position[n - 1][1] + j - 2]
+              if (box.active == false) {
+                box.rect.setFill("pink");
+              }
+              box.active = true;
+            }
+          }
+
+        } else {
+          box.rect.setFill("lightgreen");
+        }
       }
 
       //We do not need to sense human presense yet
@@ -854,6 +871,11 @@ function get_data(n, type) {
         } else {
           get_data(n + 1, type)
         }
+      } else {
+
+        clearInterval(interval);
+        layer.draw();
+        calculate_paths();
       }
     })
     .catch(error => {
@@ -863,7 +885,7 @@ function get_data(n, type) {
 
 function set_exit(x, y) {
   var sqrt = grid[x][y];
-  sqrt.active = !sqrt.active;
+  sqrt.active = false;
   sqrt.rect.setFill('lightgreen');
 }
 
@@ -875,9 +897,77 @@ const div_style = {
   width: '30%'
 }
 
-var grid_path = null;
 var sel = null;
 
+//Find path in case of fire, work on fire trigger
+function calculate_paths() {
+  var grid_path = new PF.Grid(25, 25);
+
+  for (var i = 0; i < grid.length; i++) {
+    for (var j = 0; j < grid[0].length; j++) {
+      if (grid[i][j].active == true) {
+        console.log(grid[i][j]);
+        grid_path.setWalkableAt(grid[i][j].x, grid[i][j].y, false);
+      }
+    }
+  }
+
+  var finder = new PF.AStarFinder({
+    allowDiagonal: true
+  });
+
+  var paths_ends = getEnds()[0];
+  var paths_starts = getEnds()[1];
+
+  for (var i = 0; i < paths_starts.length; i++) {
+    var selected_path = data_floor;
+    var grid_back = grid_path.clone();
+    for (var j = 0; j < paths_ends.length; j++) {
+      var path = finder.findPath(paths_starts[i][0], paths_starts[i][1], paths_ends[j][0], paths_ends[j][1], grid_back);
+      if (path.length < selected_path.length) {
+        selected_path = path;
+      }
+      var grid_back = grid_path.clone();
+    }
+
+    var final_array = [];
+    selected_path.forEach(element1 => {
+      element1.forEach(element2 => {
+        final_array.push((element2 * 40) + 20);
+      });
+    });
+
+    var blueLine = new Konva.Line({
+      points: final_array,
+      stroke: 'blue',
+      strokeWidth: 5,
+      lineCap: 'round',
+      lineJoin: 'round',
+      /*
+       * line segments with a length of 29px with a gap
+       * of 20px followed by a line segment of 0.001px (a dot)
+       * followed by a gap of 20px
+       */
+      dash: [29, 20, 0.001, 20]
+    });
+
+    layer.add(blueLine);
+    layer.draw();
+
+    console.log(selected_path)
+  }
+}
+
+function getEnds() {
+  var ends = [
+    [2, 0],
+    [21, 14],
+    [16, 20]
+  ]
+
+  var starts = boxes_position;
+  return [ends, starts]
+}
 
 
 class Demo extends Component {
@@ -894,20 +984,12 @@ class Demo extends Component {
     layer = new Konva.Layer();
     stage.add(layer);
 
-    //Create row of rooms
-    grid_path = new PF.Grid(1000, 1000);
     create_grid(1000, 1000);
     load_sample_floor();
 
-    //Find path in case of fire, work on fire trigger
-    var finder = new PF.AStarFinder({
-      allowDiagonal: true
-    });
-    var path = finder.findPath(5, 20, 1, 1, grid_path);
-    console.log(path);
     set_exit(2, 0);
-    set_exit(21, 10);
-    set_exit(11, 20);
+    set_exit(21, 14);
+    set_exit(16, 20);
     GetInfo();
   }
 
@@ -1003,9 +1085,3 @@ class Demo extends Component {
 }
 
 export default Demo;
-
-/*
-<Col xs={6}>
-          <img src={onfire} alt="room is burning" />
-</Col>
-*/
