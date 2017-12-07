@@ -85,8 +85,7 @@ function temp_upload_action() {
 		for (var i = 0; i < upload_arr.length; i++) {
 			if (upload_arr[i].id == 'temp') {
 				if (onPi) {
-					console.log(upload_arr[i].channel);
-					adc.read(upload_arr[i].channel, function (value) {
+					adc.read(parseInt(upload_arr[i].channel), function (value) {
 						var mVolts = value * 5000.0 / 1024.0;
 						var temp = (mVolts - 100.0) / 10.0 - 40.0;
 						prepare_data(upload_arr[i].ctname, temp);
@@ -109,7 +108,7 @@ function smoke_upload_action() {
 		for (var i = 0; i < upload_arr.length; i++) {
 			if (upload_arr[i].id == 'smoke') {
 				if (onPi) {
-					adc.read(upload_arr[i].channel, function (value) {
+					adc.read(parseInt(upload_arr[i].channel), function (value) {
 						var volt = value / 1024.0 * 5.0;
 						var RS = (5.0 - volt) / volt;
 						var R0 = 1.6;
@@ -134,7 +133,7 @@ function people_upload_action() {
 		for (var i = 0; i < upload_arr.length; i++) {
 			if (upload_arr[i].id == 'people') {
 				if (onPi) {
-					adc.read(upload_arr[i].channel, function (value) {
+					adc.read(parseInt(upload_arr[i].channel), function (value) {
 						var people = value > thresholds.people ? 1 : 0;
 						prepare_data(upload_arr[i].ctname, people);
 					});
