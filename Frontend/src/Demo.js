@@ -10,7 +10,7 @@ import TextField from "material-ui/TextField";
 import { grey900, amber900 } from "material-ui/styles/colors";
 import PF from "pathfinding";
 
-const host = "192.168.0.15";
+const host = "192.168.0.64";
 
 const styles = {
   errorStyle: {
@@ -797,7 +797,7 @@ function load_sample_floor() {
 
 var boxes_position = [
   [3, 3], [2, 5], [3, 12], [3, 16], [3, 21],
-  [9, 5], [9, 12], [9, 16], [9, 21],
+  [8, 8], [9, 12], [9, 16], [9, 21],
   [11, 2], [15, 2], [21, 2],
   [11, 7], [15, 7], [21, 7]
 ];
@@ -877,6 +877,9 @@ function get_data(n, type) {
             }
           }
 
+          lines.forEach(element => {
+            element.destroy();
+          });
           layer.draw();
           calculate_paths();
 
@@ -957,14 +960,15 @@ function calculate_paths() {
       var complexText = new Konva.Text({
         x: parseInt(box_trapped.x * 40),
         y: parseInt(box_trapped.y * 40),
-        text: 'P',
+        text: box_trapped.cnt_people,
         fontSize: 25,
         fontFamily: 'Calibri',
         fill: '#fff',
         width: 40,
         height: 40,
         padding: 0,
-        align: 'center'
+        align: 'center',
+        preventDefault: false
       });
 
       layer.add(complexText);
@@ -995,12 +999,15 @@ function calculate_paths() {
       dash: [29, 20, 0.001, 20]
     });
 
+    lines.push(blueLine);
     layer.add(blueLine);
     layer.draw();
 
     console.log(selected_path)
   }
 }
+
+var lines = [];
 
 function getEnds() {
   var ends = [
